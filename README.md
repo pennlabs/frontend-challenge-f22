@@ -34,17 +34,17 @@ public/
 
 src/                   Where the JS logic is
   components/          Contains all React components
-    Cart.js            Basic component for the course cart
-    Courses.js         Basic component for rendering courses
-    Nav.js             Basic component for the navbar
+    Cart.tsx           Basic component for the course cart
+    Courses.tsx        Basic component for rendering courses
+    Nav.tsx            Basic component for the navbar
     ...                Feel free to add other components
 
   data/                Contains data rendered by the components
     courses.json       Contains information on CIS courses at Penn
 
   App.css              CSS for the app
-  App.js               Root component for the app
-  index.js             Renders the React app
+  App.tsx              Root component for the app
+  index.tsx            Renders the React app
   ...
 ```
 
