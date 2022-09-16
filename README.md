@@ -81,12 +81,18 @@ Your application should implement the following features.
 6. **Additional features**
     
     If you finish early, feel free to add an additional feature! Here are some ideas.
-    
+    - Let users rank courses in order of preference using a drag and drop menu
     - Integrate data from the Penn Courses server
-        - Due to CORS, you may not be able to fetch the data directly on the frontend - you can still store the data in a local .json file like `courses.json`
+        - Note that we added the line `"proxy": "[https://penncourseplan.com](https://penncourseplan.com/)"` to `package.json`. This proxy will allow you to make requests to the Penn Courses backend without running into CORS issues.
         - The [“Retrieve Course” endpoint](https://penncourseplan.com/api/documentation/#tag/PCx-Course/operation/Retrieve%20Course) should have all the data you need to add information for a specific course, but you are welcome to use any endpoint that doesn’t require authentication.
         - Tip: use semesters from Spring 2022 and earlier - they will have 3-digit course codes that match the `courses.json` data.
-    - Let users rank courses in order of preference using a drag and drop menu
+        - Example:
+    
+        ```jsx
+        fetch('/api/base/2022A/courses/CIS-120/')
+          .then(res => res.json())
+          .then(console.log);
+        ```
 7. **Code quality**
     
     These items are totally optional, but a great opportunity to demonstrate your engineering skills!
