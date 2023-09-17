@@ -8,6 +8,7 @@ import Nav from './components/Nav';
 
 import { DefaultToast } from 'react-toast-notifications';
 export const MyCustomToast = ({ children, ...props }: ToastProps) => (
+
   <DefaultToast {...props}>
     <div>
       {/* todo: make bg penn themed colors */}
@@ -26,7 +27,7 @@ function App() {
     >
       <Nav />
       <div className='w-full px-4 max-w-4xl mx-auto'>
-        <Courses setCart={setCart} />
+        <Courses setCart={setCart} cart={cart} />
         <Cart />
       </div>
     </ToastProvider >
