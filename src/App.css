@@ -56,3 +56,11 @@
 .menu-icon:hover + .menu, .menu:hover {
   display: block;
 }
+
+.rainbow-border {
+  background-image: linear-gradient(90deg, #00C0FF 0%, #FFCF00 49%, #FC4F4F 100%);
+  position: relative;
+  padding: 0.25rem;
+  display: inline-block;
+  border-radius: 0.5rem;
+}

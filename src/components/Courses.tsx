@@ -1,17 +1,9 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
 import useSWR from 'swr';
-import courses from '../data/courses.json';
+import { Course } from '../types';
 
 
-type Course = {
-    dept: string;
-    number: number;
-    title: string;
-    prereqs?: string[];
-    crossListed?: string[];
-    description: string;
-}
 
 // ```jsx
 // fetch('/api/base/2022A/courses/CIS-120/')
@@ -21,9 +13,12 @@ type Course = {
 
 const fetcher = async (url: string) => fetch(url).then(res => res.json())
 
-const Courses = ({ cart, setCart }: { cart: number[], setCart: Dispatch<SetStateAction<number[]>> }) => {
+
+
+const Courses = ({ courses, cart, setCart }: { courses: Course[], cart: number[], setCart: Dispatch<SetStateAction<number[]>> }) => {
     const [takenCourses, setTakenCourses] = useState<number[]>([]); // stores course numbers, all courses are from the cis department
     const { addToast } = useToasts();
+
 
     function handleAddToCart(number: number) {
         const course = courses.find((course) => course.number === number);
@@ -49,7 +44,7 @@ const Courses = ({ cart, setCart }: { cart: number[], setCart: Dispatch<SetState
 
     return (
         <div className="grid grid-cols-2 gap-8">
-            {courses.map(course => <Course course={course} handleAddToCart={handleAddToCart} cart={cart} />)}
+            {courses.map(course => <CourseCard key={course.number} course={course} handleAddToCart={handleAddToCart} cart={cart} />)}
         </div>
 
     )
@@ -57,7 +52,7 @@ const Courses = ({ cart, setCart }: { cart: number[], setCart: Dispatch<SetState
 
 export default Courses;
 
-function Course({ course, handleAddToCart, cart }: { course: Course, handleAddToCart: (number: number) => void, cart: number[] }) {
+function CourseCard({ course, handleAddToCart, cart }: { course: Course, handleAddToCart: (number: number) => void, cart: number[] }) {
     const { dept, number, title, prereqs, description } = course;
     const isInCart = cart.includes(number);
     const [isExpanded, setIsExpanded] = useState(false);
@@ -66,9 +61,20 @@ function Course({ course, handleAddToCart, cart }: { course: Course, handleAddTo
 
     const { data, error, isLoading } = useSWR('/api/base/2022A/courses/CIS-120/', fetcher)
 
+
+
+
     return (
-        <div className='p-8 rounded-xl transition hover:border-stone-400 border-transparent border'>
-            <div className="flex items-center">
+        <div className={`relative p-8 rounded-xl transition hover:border-stone-400 border-transparent border ${(isTaken || isUninterested) && "opacity-50"}`}>
+            {isTaken && (
+                <div className="absolute w-full h-full opacity-20 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                    </svg>
+                </div>
+
+            )}
+            <div className="flex items-center gap-8">
                 <div>
                     <p className="font-bold uppercase text-sm text-stone-400">
                         {dept}
@@ -81,7 +87,7 @@ function Course({ course, handleAddToCart, cart }: { course: Course, handleAddTo
                 </div>
 
                 <div className="flex flex-row gap-4 ml-auto">
-                    <button
+                    {!(isTaken || isUninterested) && <button
                         className='w-10 h-10 rounded-md p-2 bg-stone-200 hover:bg-stone-400 transition-colors'
                         onClick={() => handleAddToCart(number)}
                         data-tooltip={isInCart ? "View cart" : "Add to cart"}
@@ -99,7 +105,7 @@ function Course({ course, handleAddToCart, cart }: { course: Course, handleAddTo
                             </svg>
 
                         )}
-                    </button>
+                    </button>}
 
                     <div className='relative'>
                         {/* menu */}

@@ -285,7 +285,7 @@
   {
     "dept": "CIS",
     "number": 461,
-    "title": "Advanced Renderin",
+    "title": "Advanced Rendering",
     "prereqs": [
       "Working knowledge of C++ programming",
       "Knowledge of vector geometry"
