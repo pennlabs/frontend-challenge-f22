@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { useToasts } from 'react-toast-notifications';
 import courses from '../data/courses.json';
 
 type Course = {
@@ -10,9 +11,15 @@ type Course = {
 }
 
 const Courses = ({ setCart }: { setCart: Dispatch<SetStateAction<number[]>> }) => {
+  const { addToast } = useToasts();
 
   function handleAddToCart(number: number) {
     setCart((prevCart) => [...prevCart, number]);
+    addToast(<p className='bg-upenn-blue'>Added CIS {number} to cart! <a className="underline" href="https://lauragao.ca">View cart</a></p>, {
+      appearance: 'success',
+      autoDismiss: true,
+      placement: 'top-center',
+    });
   }
 
   return (
