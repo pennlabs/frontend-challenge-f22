@@ -52,3 +52,7 @@
   z-index: 30;
   pointer-events: none;
 }
+
+.menu-icon:hover + .menu, .menu:hover {
+  display: block;
+}

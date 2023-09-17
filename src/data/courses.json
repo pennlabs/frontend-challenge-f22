@@ -215,7 +215,7 @@
   {
     "dept": "CIS",
     "number": 419,
-    "title": "Applied Machine Learnin",
+    "title": "Applied Machine Learning",
     "prereqs": ["CIS 121"],
     "description": "Machine learning has been essential to the success of many recent technologies, including autonomous vehicles, search engines, genomics, automated medical diagnosis, image recognition, and social network analysis, among many others. This course will introduce the fundamental concepts and algorithms that enable computers to learn from experience, with an emphasis on their practical application to real problems. This course will introduce supervised learning (decision trees, logistic regression, support vector machines, Bayesian methods, neural networks and deep learning), unsupervised learning (clustering, dimensionality reduction), and reinforcement learning. Additionally, the course will discuss evaluation methodology and recent applications of machine learning, including large scale learning for big data and network analysis. If CIS 519/Introduction to Machine Learning is used to fulfill the CIS/MSE core requirement, then CIS 520/Machine Learning, cannot be used to fulfill the CIS/MSE core requirement, but can be used as a CIS elective. If CIS 520/Machine Learning is used to fulfill the CIS/MSE core requirement, then CIS 519/Introduction to Machine Learning, cannot be used to fulfill the CIS/MSE core requirement, but can be used as a CIS elective."
   },
@@ -223,7 +223,7 @@
   {
     "dept": "CIS",
     "number": 421,
-    "title": "Artificial Intelligenc",
+    "title": "Artificial Intelligence",
     "prereqs": ["CIS 121", "ESE 301", "STAT 430 recommended"],
 
     "description": "This course investigates algorithms to implement resource-limited knowledge-based agents which sense and act in the world. Topics include, search, machine learning, probabilistic reasoning, natural language processing, knowledge representation and logic. After a brief introduction to the language, programming assignments will be in Python."
