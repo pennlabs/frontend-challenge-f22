@@ -40,5 +40,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://penncourseplan.com"
+  "proxy": "https://penncourseplan.com",
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
+  }
 }
