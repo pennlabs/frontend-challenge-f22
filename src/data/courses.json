@@ -29,19 +29,13 @@
     "dept": "CIS",
     "number": 140,
     "title": "Introduction to Cognitive Science",
-    "cross-listed": [
-      "PHIL 044",
-      "LING 105",
-      "PSYCH 107",
-      "COGS 001",
-      "PPE 140"
-    ],
+    "crossListed": ["PHIL 044", "LING 105", "PSYCH 107", "COGS 001", "PPE 140"],
     "description": "How do minds work? This course surveys a wide range of answers to this question from disciplines ranging from philosophy to neuroscience. The course devotes special attention to the use of simple computational and mathematical models. Topics include perception, learning, memory, decision making, emotion and consciousness."
   },
   {
     "dept": "CIS",
     "number": 160,
-    "title": "Mathematical Foundations of Computer Scienc",
+    "title": "Mathematical Foundations of Computer Science",
     "description": "What are the basic mathematical concepts and techniques needed in computer science? This course provides an introduction to proof principles and logics, functions and relations, induction principles, combinatorics and graph theory, as well as a rigorous grounding in writing and reading mathematical proofs."
   },
   {
@@ -56,7 +50,7 @@
     "number": 191,
     "title": "Using and Understanding Unix and Linux",
     "prereqs": ["CIS 110"],
-    "description": "Unix, in its many forms, runs much of the world's computer infrastructure, from cable modems and cell phones to the giant clusters that power Google and Amazon. This half-credit course provides a thorough introduction to Unix and Linux. Topics will range from critical basic skills such as examining and editing files, compiling programs and writing shell scripts, to higher level topics such as the architecture of Unix and its programming model.  The material learned is applicable to many classes, including CIS 240, CIS 331, CIS 341, CIS 371/372, and CIS 380."
+    "description": "Unix, in its many forms, runs much of the world's computer infrastructure, from cable modems and cell phones to the giant clusters that power Google and Amazon. This half-credit course provides a thorough introduction to Unix and Linux. Topics will range from critical basic skills such as examining and editing files, compiling programs and writing shell scripts, to higher level topics such as the architecture of Unix and its programming model. The material learned is applicable to many classes, including CIS 240, CIS 331, CIS 341, CIS 371/372, and CIS 380."
   },
   {
     "dept": "CIS",
@@ -75,13 +69,13 @@
   {
     "dept": "CIS",
     "number": 194,
-    "title": "Haskell Programmin",
+    "title": "Haskell Programming",
     "description": "Haskell is a high-level, purely functional programming language with a strong static type system and elegant mathematical underpinnings. It is being increasingly used in industry by organizations such as Facebook, AT&T, and NASA, along with several financial firms. We will explore the joys of functional programming, using Haskell as a vehicle. The aim of the course will be to allow you to use Haskell to easily and conveniently write practical programs. All are welcome, including those with no programming experience. Evaluation will be based on regular homework assignments and class participation."
   },
   {
     "dept": "CIS",
     "number": 195,
-    "title": "Mobile App Developmen",
+    "title": "Mobile App Development",
     "prereqs": ["CIS 120"],
     "description": "This project-oriented course is centered around application development on current mobile platforms like iOS and Android. Section 201 (iOS) will be taught in Swift, and cover iOS fundamentals such as app lifecycles, storyboarding, delegation, networking and usage of both native and external libraries. Section 202 (Android) will be taught in Java with XML and will cover Android fundamentals such as layout, app lifecycles and different APIs."
   },
@@ -323,7 +317,7 @@
     "dept": "CIS",
     "number": 497,
     "title": "Senior Project (DMD Students only)",
-    "prereqs": "Senior standing or permission of instructor",
+    "prereqs": ["Senior standing or permission of instructor"],
     "description": "The goal of this course is to provide an opportunity for seniors to define, design, and execute a project of your own choosing that demonstrates the technical skills and abilities that you have acquired during your 4 years as undergraduates. Evaluation is based on selecting an interesting topic, completing appropriate research on the state of the art in that area, communicating your objectives in writing and in presentations, accurately estimating what resources will be required to complete your chosen task, coding necessary functionality, and executing your plan."
   }
 ]
