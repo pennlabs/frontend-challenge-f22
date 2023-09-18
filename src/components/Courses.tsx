@@ -1,7 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useToasts } from "react-toast-notifications";
-import useSWR from "swr";
-import { Course, CoursePreferencesContext, fetcher } from "../utils";
+import { Course, CoursePreferencesContext } from "../utils";
 
 
 const Courses = ({ courses }: { courses: Course[] }) => {
@@ -15,6 +14,7 @@ const Courses = ({ courses }: { courses: Course[] }) => {
 
 export default Courses;
 
+
 function CourseCard({ course }: { course: Course }) {
     const { dept, number, title, prereqs, description } = course;
 
@@ -22,7 +22,10 @@ function CourseCard({ course }: { course: Course }) {
 
     const { coursePreferences, setCoursePreferences } = useContext(CoursePreferencesContext);
     const status = coursePreferences[number];
-    const [isExpanded, setIsExpanded] = useState(false);
+
+    function handleExpand() {
+
+    }
 
     function handleMarkAsTaken() {
         setCoursePreferences((prev) => {
@@ -54,10 +57,13 @@ function CourseCard({ course }: { course: Course }) {
         });
     }
 
-    const { data, error, isLoading } = useSWR(`/api/base/2022A/courses/CIS-${number}/`, fetcher)
+    const isGreyedOut = status === "taken" || status === "uninterested";
 
     return (
-        <div className={`relative p-8 rounded-xl transition hover:border-stone-400 border-transparent border ${(status === "taken" || status == "uninterested") && "opacity-50"}`}>
+        <div
+            className={`coursecard relative p-8 rounded-xl ${isGreyedOut ? "opacity-50" : "cursor-pointer"}`}
+            onClick={handleExpand}
+        >
             {status === "taken" && (
                 <div className="absolute w-full h-full opacity-20 flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green">
@@ -68,18 +74,18 @@ function CourseCard({ course }: { course: Course }) {
             )}
             <div className="flex gap-8">
                 <div>
-                    <p className="font-bold uppercase text-sm text-stone-400">
+                    <p className="font-bold uppercase text-sm text-stone-400 ibm-plex-mono">
                         {dept}
                         {" "}
                         {number}
                     </p>
-                    <h2 className="font-bold text-3xl">
+                    <h2 className={`${title.length <= 20 ? "text-3xl" : title.length <= 40 ? "text-2xl" : "text-xl"} ibm-plex-mono ${!isGreyedOut && "coursecard-title"}`}>
                         {title}
                     </h2>
                 </div>
 
                 <div className="flex flex-row gap-4 ml-auto">
-                    {!(status === "taken" || status === "uninterested") && <button
+                    {!isGreyedOut && <button
                         className="w-10 h-10 rounded-md p-2 bg-stone-200 hover:bg-stone-400 transition-colors"
                         onClick={() => handleAddToCart(number)}
                         data-tooltip={status === "cart" ? "View cart" : "Add to cart"}
@@ -95,43 +101,40 @@ function CourseCard({ course }: { course: Course }) {
                                 <path d="M12 5V19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 <path d="M5 12H19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-
                         )}
                     </button>}
 
-                    <div className="relative">
-                        {/* menu */}
-                        <button className="menu-icon w-10 h-10">
+                    {/* <div className="relative"> */}
+                    {/* menu */}
+                    {/* <button className="menu-icon w-10 h-10">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>
                         </button>
 
-                        <div className="absolute bg-white text-sm text-left hidden menu">
+                        <div className="absolute bg-white text-sm text-left hidden menu border border-black">
                             <button className="flex p-2 hover:bg-stone-50" onClick={handleMarkAsTaken}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-
-                                Mark as taken
+                                {status === "taken" ? "Unmark as taken" : "Mark as taken"}
                             </button>
                             <button className="flex p-2 hover:bg-stone-50" onClick={handleMarkAsUninterested}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                                 </svg>
-
-                                Mark as not interested
+                                {status === "uninterested" ? "Unmark as not interested" : "Mark as not interested"}
                             </button>
                         </div>
 
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
-            <p>
-                {description}
+            <p className="mt-2 text-stone-500">
+                {description.split(" ").slice(0, 25).join(" ") + "..."} <button className="text-upenn-blue" onClick={handleExpand}>Read more</button>
             </p>
-
+            {/* 
             {
                 prereqs && (
                     <p className="my-1 text-stone-500">
@@ -145,7 +148,7 @@ function CourseCard({ course }: { course: Course }) {
                         ))}
                     </p>
                 )
-            }
+            } */}
         </div >
     )
 }

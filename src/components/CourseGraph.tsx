@@ -39,6 +39,13 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
         return acc;
     }, {});
 
+    function handleClick(course: Course) {
+        // I want to display a screen on the right that contains course information and allows you to add it to cart and etc.
+        // It should contain the course number, title, description, prereqs, and coreqs. It should also have a button to add it to cart.
+
+
+    }
+
     useEffect(() => {
         if (!svgRef.current) return;
 
@@ -50,31 +57,19 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
         setWidth(width);
         setHeight(height);
 
-        // Arrow marker definition
-        svg.append("defs").append("marker")
-            .attr("id", "arrow")
-            .attr("viewBox", "0 -5 10 10")
-            .attr("refX", 15)
-            .attr("refY", 0)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
-            .attr("orient", "auto")
-            .append("path")
-            .attr("d", "M0,-5L10,0L0,5")
-            .attr("fill", "#999");
-
         const simulation = d3.forceSimulation(courses)
             .force("link", d3.forceLink(prerequisites).id((d: Course) => d.id).distance(100))
             .force("charge", d3.forceManyBody().strength(-200))
             .force("center", d3.forceCenter(width / 2, height / 2));
 
+        // Add one line for each prerequisite
         const link = svg.append("g")
             .attr("stroke", "#e7e5e4") // tailwind stone 200
             .selectAll("line")
             .data(prerequisites)
             .join("line")
 
-        // Filter for the nodes" outside glow
+        // Filter for the nodes' outside glow
         const filter = svg.append("defs").append("filter")
             .attr("id", "glow");
         filter.append("feGaussianBlur")
@@ -84,6 +79,7 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
         feMerge.append("feMergeNode").attr("in", "coloredBlur");
         feMerge.append("feMergeNode").attr("in", "SourceGraphic");
 
+        // Add one node for each course
         const node = svg.append("g")
             .selectAll("circle")
             .data(courses)
@@ -104,6 +100,21 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
             .attr("fill", "#a8a29e") // tailwind stone 400
             .text((d: Course) => d.label);
 
+        // Add mouseover, mouseout, and click events
+        node.on("mouseover", function (d: SimulatedNode) {
+            d3.select(this) // 'this' refers to the current node being hovered
+                .style("stroke-width", "5px") // Increase stroke width for glow effect
+                .style("cursor", "pointer"); // Change the cursor to a pointer
+        })
+            .on("mouseout", function (d) {
+                d3.select(this) // 'this' refers to the current node
+                    .style("stroke-width", "1px"); // Reset stroke width
+            })
+            .on("click", function (event: MouseEvent, course: SimulatedNode) {
+                handleClick(course)
+            });
+
+        // Natural simulation of node movement
         simulation.on("tick", () => {
             link
                 .attr("x1", (d: SimulatedLink) => d.source.x)
@@ -120,6 +131,7 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
                 .attr("y", (d: SimulatedNode) => d.y);
         });
 
+        // Handle dragging nodes
         function drag(simulation: Simulation<SimulatedNode, SimulatedLink>) {
             function dragstarted(event: D3DragEvent<SimulatedNode, SimulatedNode, SimulatedNode>, d: SimulatedNode) {
                 if (!event.active) simulation.alphaTarget(0.3).restart();

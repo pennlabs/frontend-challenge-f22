@@ -21,7 +21,7 @@ export default function Home() {
     const semester = "2023C"
     const { data: courseData, error, isLoading } = useSWR(`/api/base/${semester}/courses`, fetcher);
     const { data: mmm } = useSWR(`/api/base/${semester}/courses/CIS-2400`, fetcher);
-    console.log(courseData)
+    console.log(courseData, error, isLoading)
     console.log(mmm)
 
     const [courses, setCourses] = useState<Course[]>([]);

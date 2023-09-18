@@ -80,3 +80,20 @@ circle {
 .ibm-plex-mono {
   font-family: "IBM Plex Mono", monospace;
 }
+
+/* Underline expansion on hover effect */
+.coursecard > div > div > .coursecard-title {
+  position: relative; 
+  text-decoration: none;
+  color: "#011F5B"; /* UPenn Blue */
+  display: inline;
+  background-image: linear-gradient(currentColor, currentColor); 
+  background-position: 0% 100%; 
+  background-repeat: no-repeat; 
+  background-size: 0% 4px; /* This controls the initial size of the underline */
+  transition: background-size 0.3s ease-in-out; 
+}
+
+.coursecard:hover > div > div > .coursecard-title {
+  background-size: 100% 4px; /* This ensures the underline expands fully on hover */
+}
