@@ -1,9 +1,11 @@
-import { useContext } from "react"
+import { ReactNode, useContext } from "react"
 import Skeleton from "react-loading-skeleton"
+import { Link } from "react-router-dom"
 import useSWR from "swr"
 import { Course, CoursePreferencesContext, DetailedCourse, fetcher } from "../utils"
 
 
+// Helper icons and buttons that are commonly used on this page
 const ShoppingCartIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
         <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
@@ -28,7 +30,45 @@ const PlusIcon = () => (
     </svg >
 )
 
+const PrimaryButton = ({ children, onClick }: { children: ReactNode, onClick?: () => void }) => (
+    <button onClick={onClick} className="p-4 text-white bg-upenn-blue hover:bg-black rounded-lg flex items-center gap-2 text-sm transition">
+        {children}
+    </button>
+)
+
+const SecondaryButton = ({ children, onClick }: { children: ReactNode, onClick?: () => void }) => (
+    <button onClick={onClick} className="p-4 text-upenn-blue hover:text-white hover:bg-upenn-blue border-2 border-upenn-blue rounded-lg flex items-center gap-2 text-sm transition">
+        {children}
+    </button>
+)
+
+const ViewCartButton = ({ type }: { type: "primary" | "secondary" }) => {
+    const children = (
+        <>
+            <ShoppingCartIcon />
+            <span>View cart</span>
+        </>
+    )
+    return (
+        <Link to="/cart">
+            {type === "primary" ? <PrimaryButton>{children}</PrimaryButton> : <SecondaryButton>{children}</SecondaryButton>}
+        </Link>
+    )
+}
+
+// Rename to RedSecondaryButton when not all red buttons use the same icon
+const DeleteButton = ({ children, onClick }: { children: string, onClick?: () => void }) => (
+    <button onClick={onClick} className="p-4 text-upenn-red hover:text-white hover:bg-upenn-red border-2 border-upenn-red rounded-lg flex items-center gap-2 text-sm transition">
+        <MinusCircleIcon />
+        <span>
+            {children}
+        </span>
+    </button>
+)
+
+
 const CourseSidebar = ({ course }: { course: Course }) => {
+    const { dept, number, title, description, prereqs, crossListed } = course;
     const { data, error, isLoading } = useSWR<DetailedCourse>(`/api/base/2022A/courses/CIS-${course.number}`, fetcher)
     // @ts-ignore - api returns { detail: "Not found." } when error
     const success = data && data?.detail !== "Not found.";
@@ -36,8 +76,13 @@ const CourseSidebar = ({ course }: { course: Course }) => {
     const { coursePreferences, setCoursePreferences } = useContext(CoursePreferencesContext);
     const status = coursePreferences[course.number];
 
-    const { dept, number, title, description, prereqs, crossListed } = course;
-
+    function handleChangeStatus(newStatus: "none" | "cart" | "taken" | "uninterested") {
+        setCoursePreferences((prev) => {
+            const newCoursePreferences = { ...prev };
+            newCoursePreferences[number] = newStatus;
+            return newCoursePreferences;
+        });
+    }
 
     return (
         <div className="z-30 absolute border-l-4 border-stone-400 shadow-lg px-8 overflow-y-scroll" style={{ height: "calc(100vh - 88px" }}>
@@ -142,88 +187,58 @@ const CourseSidebar = ({ course }: { course: Course }) => {
 
                     {status === "cart" ? (
                         <div className="mt-40">
-                            <div className="flex gap-2 mb-4">
+                            <div className="flex items-center gap-2 mb-4">
                                 <CheckmarkCircleIcon />
                                 <span>This course is in your cart</span>
                             </div>
 
-                            <div className="flex gap-4 mt-8">
-                                <button className="p-4 text-white bg-upenn-blue hover:bg-black rounded-lg flex items-center gap-2 text-sm transition">
-                                    <ShoppingCartIcon />
-                                    <span>View cart</span>
-                                </button>
-
-                                <button className="p-4 text-upenn-red hover:text-white hover:bg-upenn-red border-2 border-upenn-red rounded-lg flex items-center gap-2 text-sm transition">
-                                    {/* minus circle icon */}
-                                    <MinusCircleIcon />
-                                    <span>
-                                        Remove course from cart
-                                    </span>
-                                </button>
+                            <div className="flex items-center gap-4 mt-8">
+                                <ViewCartButton type="primary" />
+                                <DeleteButton onClick={() => handleChangeStatus("none")}>Remove course from cart</DeleteButton>
                             </div>
                         </div>
                     ) : status === "none" ? (
-                        <div className="flex gap-4 mt-40">
-                            <button className="p-4 text-white bg-upenn-blue hover:bg-black rounded-lg flex items-center gap-2 text-sm transition">
+                        <div className="flex items-center gap-4 mt-40">
+                            <PrimaryButton onClick={() => handleChangeStatus("cart")}>
                                 <PlusIcon />
                                 <span>Add to cart</span>
-                            </button>
+                            </PrimaryButton>
 
-                            <button className="p-4 text-upenn-blue hover:text-white hover:bg-upenn-blue border-2 border-upenn-blue rounded-lg flex items-center gap-2 text-sm transition">
-                                <ShoppingCartIcon />
-                                <span>
-                                    View cart
-                                </span>
-                            </button>
+                            <ViewCartButton type="secondary" />
                         </div>
                     ) : (
                         status === "taken" ? (
                             <div className="mt-40">
-                                <div className="flex gap-2 mb-4 text-green-600">
+                                <div className="flex items-center gap-2 mb-4 text-green-600">
                                     <CheckmarkCircleIcon />
                                     <span>
                                         You already took this class
                                     </span>
                                 </div>
 
-                                <div className="flex gap-4 mt-8">
-                                    <button className="p-4 text-upenn-red hover:text-white hover:bg-upenn-red border-2 border-upenn-red rounded-lg flex items-center gap-2 text-sm transition">
-                                        <MinusCircleIcon />
-                                        <span>
-                                            Remove from taken courses
-                                        </span>
-                                    </button>
-
-                                    <button className="p-4 text-white bg-upenn-blue hover:bg-black rounded-lg flex items-center gap-2 text-sm transition">
-                                        <ShoppingCartIcon />
-                                        <span>View cart</span>
-                                    </button>
+                                <div className="flex items-center gap-4 mt-8">
+                                    <DeleteButton onClick={() => handleChangeStatus("none")}>Remove from taken courses</DeleteButton>
+                                    <ViewCartButton type="primary" />
                                 </div>
                             </div>
                         ) : (
                             // status must be uninterested
                             <div className="mt-40">
-                                <div className="flex gap-2 mb-4 text-upenn-red">
+                                <div className="flex items-center gap-2 mb-4 text-upenn-red">
                                     <MinusCircleIcon />
                                     <span>
                                         You marked this class as uninterested
                                     </span>
                                 </div>
 
-                                <div className="flex gap-4 mt-8">
-                                    <button className="p-4 text-upenn-blue hover:text-white hover:bg-upenn-blue border-2 border-upenn-blue rounded-lg flex items-center gap-2 text-sm transition">
+                                <div className="flex items-center gap-4 mt-8">
+                                    <SecondaryButton onClick={() => handleChangeStatus("none")}>
                                         <MinusCircleIcon />
                                         <span>
                                             Remove from uninterested courses
                                         </span>
-                                    </button>
-
-                                    <button className="p-4 text-white bg-upenn-blue hover:bg-black rounded-lg flex items-center gap-2 text-sm transition">
-                                        <ShoppingCartIcon />
-                                        <span>
-                                            View cart
-                                        </span>
-                                    </button>
+                                    </SecondaryButton>
+                                    <ViewCartButton type="primary" />
                                 </div>
                             </div>
                         )
@@ -231,7 +246,7 @@ const CourseSidebar = ({ course }: { course: Course }) => {
                 </div>
             </div >
 
-        </div>
+        </div >
     )
 }
 
