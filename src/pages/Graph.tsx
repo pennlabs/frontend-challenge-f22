@@ -1,11 +1,11 @@
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import useSWR from "swr";
 import Cart from "../components/Cart";
 import Courses from "../components/Courses";
 import SearchInput from "../components/SearchInput";
-import { Course, fetcher } from "../utils";
+import courseData from "../data/courses.json";
+import { Course } from "../utils";
 
 function LoadingCourse() {
     return (
@@ -18,13 +18,7 @@ function LoadingCourse() {
 }
 
 export default function Home() {
-    const semester = "2023C"
-    const { data: courseData, error, isLoading } = useSWR(`/api/base/${semester}/courses`, fetcher);
-    const { data: mmm } = useSWR(`/api/base/${semester}/courses/CIS-2400`, fetcher);
-    console.log(courseData)
-    console.log(mmm)
-
-    const [courses, setCourses] = useState<Course[]>([]);
+    const [courses, setCourses] = useState<Course[]>(courseData);
     // in semantic search, we show additional courses that are similar to the query that didn"t make it into the main search.
     const [additonalCourses, setAdditionalCourses] = useState<Course[]>([]);
     const [isSearchLoading, setIsSearchLoading] = useState(false);

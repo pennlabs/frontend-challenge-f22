@@ -24,8 +24,8 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
     }) => {
 
     const [isSemanticSearch, setIsSemanticSearch] = useState(false);
-    const [hideT, setHideT] = useState(false);
-    const [hideI, setHideI] = useState(false);
+    const [hideTaken, setHideTaken] = useState(false);
+    const [hideUninterested, setHideUninterested] = useState(false);
 
     const { coursePreferences } = useContext(CoursePreferencesContext);
 
@@ -40,9 +40,10 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
             return;
         }
 
+        // eslint-disable-next-line prefer-const
         let coursesAfterFilter = courseData;
-        if (hideT) coursesAfterFilter.filter(course => coursePreferences[course.number] !== "taken");
-        if (hideI) coursesAfterFilter.filter(course => coursePreferences[course.number] !== "uninterested");
+        if (hideTaken) coursesAfterFilter.filter(course => coursePreferences[course.number] !== "taken");
+        if (hideUninterested) coursesAfterFilter.filter(course => coursePreferences[course.number] !== "uninterested");
 
         const options = {
             method: "POST",
@@ -119,12 +120,12 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
                     <span className={`inline-block p-2 px-4 rounded-md ${!isSemanticSearch && `bg-white hover:bg-transparent transition`}`}>Semantic search ✨</span>
                 </button>
 
-                <button onClick={() => setHideT(prev => !prev)}>
+                <button onClick={() => setHideTaken(prev => !prev)}>
                     hide already taken courses
                 </button>
 
-                <button onClick={() => setHideI(prev => !prev)} className={"flex items-center gap-4 " + hideI ? "rounded-full border-2 border-upenn-blue" : ""}>
-                    {hideI && (
+                <button onClick={() => setHideUninterested(prev => !prev)} className={"flex items-center gap-4 " + hideUninterested ? "rounded-full border-2 border-upenn-blue" : ""}>
+                    {hideUninterested && (
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                         </svg>
