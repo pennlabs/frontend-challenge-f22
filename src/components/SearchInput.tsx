@@ -1,6 +1,8 @@
 import axios from 'axios';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { Course } from '../types';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
+import courseData from '../data/courses.json';
+import { Course, CoursePreferencesContext } from '../utils';
+
 
 function semanticSimilarity(a: number[], b: number[]) {
     const dot = (a: Float64Array, b: Float64Array) =>
@@ -14,19 +16,33 @@ function semanticSimilarity(a: number[], b: number[]) {
     return dot(aEmbed, bEmbed) / (norm(aEmbed) * norm(bEmbed));
 }
 
-const SearchInput = ({ courseData, courses, setCourses, setCourses2, setIsLoading }:
+const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
     {
-        courseData: Course[],
-        courses: Course[],
         setCourses: Dispatch<SetStateAction<Course[]>>,
-        setCourses2: Dispatch<SetStateAction<Course[]>>,
+        setAdditionalCourses: Dispatch<SetStateAction<Course[]>>,
         setIsLoading: Dispatch<SetStateAction<boolean>>
     }) => {
 
     const [isSemanticSearch, setIsSemanticSearch] = useState(false);
+    const [hideT, setHideT] = useState(false);
+    const [hideI, setHideI] = useState(false);
+
+    const { coursePreferences } = useContext(CoursePreferencesContext);
 
     function handleSemanticSearch(query: string) {
         setIsLoading(true);
+
+        if (!query) {
+            // Clear the search
+            setCourses(courseData);
+            setAdditionalCourses([]);
+            setIsLoading(false);
+            return;
+        }
+
+        let coursesAfterFilter = courseData;
+        if (hideT) coursesAfterFilter.filter(course => coursePreferences[course.number] !== "taken");
+        if (hideI) coursesAfterFilter.filter(course => coursePreferences[course.number] !== "uninterested");
 
         const options = {
             method: 'POST',
@@ -36,7 +52,7 @@ const SearchInput = ({ courseData, courses, setCourses, setCourses2, setIsLoadin
                 'content-type': 'application/json',
                 authorization: 'Bearer 0raSpWg7qGJC9WMO98zGGlrpx7O9onxj2k5Hccfh'
             },
-            data: { texts: [query, ...courseData.map(course => course.title + "\n" + course.description)], truncate: 'END' }
+            data: { texts: [query, ...coursesAfterFilter.map(course => course.title + "\n" + course.description)], truncate: 'END' }
         };
 
         axios
@@ -57,7 +73,7 @@ const SearchInput = ({ courseData, courses, setCourses, setCourses2, setIsLoadin
                 const filteredCourses = sortedCourses.filter(course => course.similarity >= 0.45);
                 const filteredCourses2 = sortedCourses.filter(course => course.similarity < 0.45 && course.similarity >= 0.3);
                 setCourses(filteredCourses);
-                setCourses2(filteredCourses2);
+                setAdditionalCourses(filteredCourses2);
                 setIsLoading(false);
 
             })
@@ -87,7 +103,7 @@ const SearchInput = ({ courseData, courses, setCourses, setCourses2, setIsLoadin
                 <p className='text-stone-400 text-right px-8 mt-3'>Enter to search</p>
             </div >
 
-            <div className='flex w-full gap-4'>
+            <div className='flex w-full gap-4 mx-8'>
                 <button
                     data-tooltip="Plain basic search, matches exactly what you type"
                     className={`${isSemanticSearch ? "text-stone-500 transition hover:bg-stone-500 hover:text-white" : "bg-stone-500 text-white"} border-2 border-stone-500 p-2 rounded-md`}
@@ -101,6 +117,19 @@ const SearchInput = ({ courseData, courses, setCourses, setCourses2, setIsLoadin
                     onClick={() => setIsSemanticSearch(true)}
                 >
                     <span className={`inline-block p-2 px-4 rounded-md ${!isSemanticSearch && `bg-white hover:bg-transparent transition`}`}>Semantic search ✨</span>
+                </button>
+
+                <button onClick={() => setHideT(prev => !prev)}>
+                    hide already taken courses
+                </button>
+
+                <button onClick={() => setHideI(prev => !prev)} className={"flex items-center gap-4 " + hideI ? "rounded-full border-2 border-upenn-blue" : ""}>
+                    {hideI && (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                    )}
+                    hide uninterested courses
                 </button>
 
             </div>
