@@ -39,7 +39,7 @@ export default function Home() {
                     </div>
                 ) : (
                     <>
-                        <p className="text-stone-400 mb-8">Showing {courses.length} results</p>
+                        <p className="text-stone-400 mb-8 mt-16">Showing {courses.length} results</p>
                         <Courses courses={courses} />
                         {additonalCourses.length > 0 && <p className="text-center my-12 text-stone-400 text-xl">You might also like:</p>}
                         <Courses courses={additonalCourses} />

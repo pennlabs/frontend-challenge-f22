@@ -2,7 +2,7 @@ import { ReactNode, useContext } from "react"
 import Skeleton from "react-loading-skeleton"
 import { Link } from "react-router-dom"
 import useSWR from "swr"
-import { Course, CoursePreferencesContext, DetailedCourse, fetcher } from "../utils"
+import { CoursePreferencesContext, DetailedCourse, SidebarCourseContext, fetcher } from "../utils"
 
 
 // Helper icons and buttons that are commonly used on this page
@@ -67,14 +67,17 @@ const DeleteButton = ({ children, onClick }: { children: string, onClick?: () =>
 )
 
 
-const CourseSidebar = ({ course }: { course: Course }) => {
-    const { dept, number, title, description, prereqs, crossListed } = course;
-    const { data, error, isLoading } = useSWR<DetailedCourse>(`/api/base/2022A/courses/CIS-${course.number}`, fetcher)
+const CourseSidebar = () => {
+    const { sidebarCourse, setSidebarCourse } = useContext(SidebarCourseContext);
+    if (!sidebarCourse) return <></>;
+
+    const { dept, number, title, description, prereqs, crossListed } = sidebarCourse;
+    const { data, error, isLoading } = useSWR<DetailedCourse>(`/api/base/2022A/courses/CIS-${number}`, fetcher)
     // @ts-ignore - api returns { detail: "Not found." } when error
     const success = data && data?.detail !== "Not found.";
 
     const { coursePreferences, setCoursePreferences } = useContext(CoursePreferencesContext);
-    const status = coursePreferences[course.number];
+    const status = coursePreferences[number];
 
     function handleChangeStatus(newStatus: "none" | "cart" | "taken" | "uninterested") {
         setCoursePreferences((prev) => {
@@ -85,7 +88,7 @@ const CourseSidebar = ({ course }: { course: Course }) => {
     }
 
     return (
-        <div className="z-30 absolute border-l-4 border-stone-400 shadow-lg px-8 overflow-y-scroll" style={{ height: "calc(100vh - 88px" }}>
+        <div className="max-w-2xl border-l-4 border-stone-400 shadow-lg px-8 overflow-y-scroll" style={{ height: "calc(100vh - 88px" }}>
             <div
                 className={`my-16 relative`}
             >
@@ -104,6 +107,16 @@ const CourseSidebar = ({ course }: { course: Course }) => {
                     </div>
 
                 )}
+
+                <div className="absolute top-0 right-0">
+                    <button className="text-stone-200 hover:text-stone-400 transition" onClick={() => setSidebarCourse(null)}>
+                        {/* X icon */}
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={0.5} stroke="currentColor" className="w-16 h-16">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+
+                    </button>
+                </div>
 
                 <div className="">
                     <div className="flex gap-8">
