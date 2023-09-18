@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { useToasts } from "react-toast-notifications";
-import { Course, CoursePreferencesContext } from "../utils";
+import { Course, CoursePreferencesContext, SidebarCourseContext } from "../utils";
 
 
 const Courses = ({ courses }: { courses: Course[] }) => {
     return (
-        <div className="grid grid-cols-2 gap-x-16 gap-y-24">
+        <div className="grid md:grid-cols-2 gap-x-16 gap-y-24">
             {courses.map(course => <CourseCard key={course.number} course={course} />)}
         </div>
 
@@ -32,10 +32,11 @@ function CourseCard({ course }: { course: Course }) {
 
 
     const { coursePreferences, setCoursePreferences } = useContext(CoursePreferencesContext);
+    const { sidebarCourse, setSidebarCourse } = useContext(SidebarCourseContext);
     const status = coursePreferences[number];
 
     function handleExpand() {
-
+        setSidebarCourse(course);
     }
 
     const isGreyedOut = status === "taken" || status === "uninterested";
@@ -88,27 +89,12 @@ function CourseCard({ course }: { course: Course }) {
                 <p className="mt-2 text-stone-500">
                     {description.split(" ").slice(0, 25).join(" ") + "..."} <button className="text-upenn-blue" onClick={handleExpand}>Read more</button>
                 </p>
-                {/* 
-            {
-                prereqs && (
-                    <p className="my-1 text-stone-500">
-                        Prerequisites:
-                        {" "}
-                        {prereqs.map((prereq, i) => (
-                            <span key={prereq}>
-                                {i > 0 && ", "}
-                                {prereq}
-                            </span>
-                        ))}
-                    </p>
-                )
-            } */}
             </div>
         </div >
     )
 }
 
-const CornerMenu = ({ course }: { course: Course }) => {
+export const CornerMenu = ({ course }: { course: Course }) => {
     const { addToast } = useToasts();
     const { coursePreferences, setCoursePreferences } = useContext(CoursePreferencesContext);
 
@@ -188,6 +174,16 @@ const CornerMenu = ({ course }: { course: Course }) => {
                         <span>{status === "uninterested" ? "Unmark as not interested" : "Mark as not interested"}</span>
                     </button>
                 </div>
+
+                {/* if in cart, add an option to remove from cart */}
+                {status === "cart" && (
+                    <div className="absolute bg-white text-xs text-left hidden menu border border-black">
+                        <button className="flex items-center p-1.5 hover:bg-stone-100" onClick={() => handleAddToCart(number)}>
+                            <MinusCircleIcon />
+                            <span>Remove from cart</span>
+                        </button>
+                    </div>
+                )}
 
             </div>
         </div>

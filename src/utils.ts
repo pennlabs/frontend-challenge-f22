@@ -7,7 +7,35 @@ export type Course = {
     prereqs?: string[];
     crossListed?: string[];
     description: string;
-    similarity?: number;
+}
+
+export interface CourseWithSimilarity extends Course {
+    similarity: number;
+}
+
+export interface DetailedCourse extends Course {
+    "id": string,
+    "syllabus_url": string | null,
+    "semester": string,
+    "course_quality": number,
+    "instructor_quality": number,
+    "sections": {
+        id: string,
+        status: number,
+        activity: string,
+        credits: number,
+        capacity: number,
+        semester: string,
+        meetings: {day: string, start: number, end: number, room: string}[],
+        instructors: {id: number, name: string}[],
+        "course_quality": number,
+        "instructor_quality": number,
+        "difficulty": number,
+        "work_required": number,
+        "associated_sections": string[],
+        "registration_volume": number,
+    }[],
+
 }
 
 export const fetcher = async (url: string) => fetch(url).then(res => res.json())
@@ -21,3 +49,8 @@ export interface CoursePreference {
 type ContextType = { coursePreferences: CoursePreference, setCoursePreferences: Dispatch<SetStateAction<CoursePreference>> };
 const dummyContext = { coursePreferences: {}, setCoursePreferences: () => { } };
 export const CoursePreferencesContext = createContext<ContextType>(dummyContext);
+
+// Sidebar course context
+type SidebarContextType = { sidebarCourse: (Course | null), setSidebarCourse: Dispatch<SetStateAction<(Course | null)>> };
+const sidebarDummyContext = { sidebarCourse: null, setSidebarCourse: () => { } };
+export const SidebarCourseContext = createContext<SidebarContextType>(sidebarDummyContext);

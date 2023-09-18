@@ -7,13 +7,14 @@ import {
 import { useEffect, useState } from "react";
 import { ToastProvider } from "react-toast-notifications";
 import "./App.css";
+import CourseSidebar from "./components/CourseSidebar";
 import Nav from "./components/Nav";
 import courseData from "./data/courses.json";
-import All from "./pages/All";
+import Cart from "./pages/Cart";
 import Graph from "./pages/Ggraph";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
-import { CoursePreference, CoursePreferencesContext } from "./utils";
+import { Course, CoursePreference, CoursePreferencesContext, SidebarCourseContext } from "./utils";
 
 
 const localStorageKey = "PENNCOURSECART_COURSE_PREFERENCES";
@@ -30,6 +31,7 @@ const initialCoursePreferences = localStorageCoursePreferences ? (
 function App() {
     // reduce the course data to a map of course number to preference
     const [coursePreferences, setCoursePreferences] = useState<CoursePreference>(initialCoursePreferences)
+    const [sidebarCourse, setSidebarCourse] = useState<Course | null>(null);
 
     // whenever the course preferences change, save them to local storage
     useEffect(() => {
@@ -42,19 +44,30 @@ function App() {
             placement="top-center"
         >
             <CoursePreferencesContext.Provider value={{ coursePreferences: coursePreferences, setCoursePreferences: setCoursePreferences }}>
-                <Router>coursePreferences
-                    <div>
-                        <Nav />
+                <SidebarCourseContext.Provider value={{ sidebarCourse: sidebarCourse, setSidebarCourse: setSidebarCourse }}>
+                    <Router>
+                        <div>
+                            <Nav />
 
-                        {/* Routes */}
-                        <Routes>
-                            <Route path="/" element={<Home />} />
-                            <Route path="all" element={<All />} />
-                            <Route path="graph" element={<Graph />} />
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
-                    </div>
-                </Router>
+                            {/* Routes */}
+                            <div className="flex w-screen overflow-auto">
+                                <div>
+                                    <Routes>
+                                        <Route path="/" element={<Home />} />
+                                        <Route path="cart" element={<Cart />} />
+                                        <Route path="graph" element={<Graph />} />
+                                        <Route path="*" element={<NotFound />} />
+                                    </Routes>
+                                </div>
+                                {sidebarCourse && (
+                                    <div>
+                                        <CourseSidebar key={sidebarCourse.number} course={sidebarCourse} />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </Router>
+                </SidebarCourseContext.Provider>
             </CoursePreferencesContext.Provider>
         </ToastProvider>
     );

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import courseData from "../data/courses.json";
-import { Course, CoursePreferencesContext } from "../utils";
+import { Course, CoursePreferencesContext, CourseWithSimilarity } from "../utils";
 
 
 function semanticSimilarity(a: number[], b: number[]) {
@@ -18,8 +18,8 @@ function semanticSimilarity(a: number[], b: number[]) {
 
 const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
     {
-        setCourses: Dispatch<SetStateAction<Course[]>>,
-        setAdditionalCourses: Dispatch<SetStateAction<Course[]>>,
+        setCourses: Dispatch<SetStateAction<(Course | CourseWithSimilarity)[]>>,
+        setAdditionalCourses: Dispatch<SetStateAction<(Course | CourseWithSimilarity)[]>>,
         setIsLoading: Dispatch<SetStateAction<boolean>>
     }) => {
 

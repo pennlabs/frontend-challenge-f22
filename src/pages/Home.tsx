@@ -5,7 +5,7 @@ import Cart from "../components/Cart";
 import Courses from "../components/Courses";
 import SearchInput from "../components/SearchInput";
 import courseData from "../data/courses.json";
-import { Course } from "../utils";
+import { Course, CourseWithSimilarity } from "../utils";
 
 function LoadingCourse() {
     return (
@@ -18,9 +18,9 @@ function LoadingCourse() {
 }
 
 export default function Home() {
-    const [courses, setCourses] = useState<Course[]>(courseData);
+    const [courses, setCourses] = useState<(Course | CourseWithSimilarity)[]>(courseData);
     // in semantic search, we show additional courses that are similar to the query that didn"t make it into the main search.
-    const [additonalCourses, setAdditionalCourses] = useState<Course[]>([]);
+    const [additonalCourses, setAdditionalCourses] = useState<(Course | CourseWithSimilarity)[]>([]);
     const [isSearchLoading, setIsSearchLoading] = useState(false);
 
     return (
