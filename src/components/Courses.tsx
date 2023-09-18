@@ -74,7 +74,7 @@ function CourseCard({ course, handleAddToCart, cart }: { course: Course, handleA
                 </div>
 
             )}
-            <div className="flex items-center gap-8">
+            <div className="flex gap-8">
                 <div>
                     <p className="font-bold uppercase text-sm text-stone-400">
                         {dept}
