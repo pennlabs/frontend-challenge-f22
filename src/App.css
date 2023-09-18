@@ -64,3 +64,13 @@
   display: inline-block;
   border-radius: 0.5rem;
 }
+
+circle {
+  stroke: #1d51b8;    /* Define the stroke color of the circle */
+}
+
+#glow feGaussianBlur {
+  color-interpolation-filters: sRGB;
+  flood-color: #1d51b8;   /* Define the glow color */
+  flood-opacity: 0.8;
+}

@@ -6,6 +6,15 @@ function CourseGraph({ courses, prerequisites }) {
     const [width, setWidth] = useState<number>(600);
     const [height, setHeight] = useState<number>(400);
 
+    // Calculate the out-degree for each course
+    // (the number of courses that depend on it)
+    // this is used to determine the size of the node
+    const degreeMap = prerequisites.reduce((acc, link) => {
+        acc[link.source] = (acc[link.source] || 0) + 1;
+        return acc;
+    }, {});
+    console.log(degreeMap)
+
     useEffect(() => {
         if (!svgRef.current) return;
 
@@ -42,14 +51,23 @@ function CourseGraph({ courses, prerequisites }) {
             .join("line")
             .attr("marker-end", "url(#arrow)"); // Attach the arrow marker to the end of the line
 
+        // Filter for the nodes' outside glow
+        const filter = svg.append('defs').append('filter')
+            .attr('id', 'glow');
+        filter.append('feGaussianBlur')
+            .attr('stdDeviation', '2.5')
+            .attr('result', 'coloredBlur');
+        const feMerge = filter.append('feMerge');
+        feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+        feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+
         const node = svg.append("g")
-            // .attr("stroke", "#a8a29e") // tailwind stone 400
-            // .attr("stroke-width", 1.5)
             .selectAll("circle")
             .data(courses)
             .join("circle")
-            .attr("r", 20)
+            .attr("r", d => 20 + (degreeMap[d.id] || 0) * 5)  // Adjust node size based on out-degree. Base size is 20, and grows by 5 units for each additional degree.
             .attr("fill", "#011F5B") // UPenn blue
+            .style('filter', 'url(#glow)')
             .call(drag(simulation));
 
         // Adding labels
