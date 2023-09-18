@@ -65,8 +65,8 @@ function App() {
                     <>
                         <p className='text-stone-400'>Showing {courses.length} results</p>
                         <Courses courses={courses} setCart={setCart} cart={cart} />
-                        <p className='text-center my-12 text-stone-400 text-xl'>You might also like:</p>
-                        {courses2.length > 0 && <Courses courses={courses2} setCart={setCart} cart={cart} />}
+                        {courses2.length > 0 && <p className='text-center my-12 text-stone-400 text-xl'>You might also like:</p>}
+                        <Courses courses={courses2} setCart={setCart} cart={cart} />
                     </>
                 )}
                 <Cart />
