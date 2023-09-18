@@ -16,6 +16,34 @@ function semanticSimilarity(a: number[], b: number[]) {
     return dot(aEmbed, bEmbed) / (norm(aEmbed) * norm(bEmbed));
 }
 
+
+// if a query contains quotation marks, returns true if it contains at least one thing in the quotation marks.
+// if query doesn't contain quotation marks, then return true if it includes the entire query.
+function matchQuery(query: string, longText: string) {
+    const normalizedQuery = query.toLowerCase();
+    const normalizedLongText = longText.toLowerCase();
+
+    if (normalizedLongText.includes(normalizedQuery)) return true;
+
+    if (normalizedQuery.includes('"')) {
+        // Extract everything between the quotation marks
+        const matches = normalizedQuery.match(/"(.*?)"/g);
+
+        if (!matches) return false;
+
+        // Check if any matched content between quotation marks is present in longText
+        for (let match of matches) {
+            const strippedMatch = match.slice(1, -1).trim();
+            if (normalizedLongText.includes(strippedMatch)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
 const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
     {
         setCourses: Dispatch<SetStateAction<(Course | CourseWithSimilarity)[]>>,
@@ -81,6 +109,29 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
                 console.error(error);
             });
     }
+
+    function handleTextSearch(query: string) {
+        setIsLoading(true);
+
+        if (!query) {
+            // Clear the search
+            setCourses(courseData);
+            setAdditionalCourses([]);
+            setIsLoading(false);
+            return;
+        }
+
+        let coursesAfterFilter = courseData;
+        if (hideTaken) coursesAfterFilter = coursesAfterFilter.filter(course => coursePreferences[course.number] !== "taken");
+        if (hideUninterested) coursesAfterFilter = coursesAfterFilter.filter(course => coursePreferences[course.number] !== "uninterested");
+
+        coursesAfterFilter = coursesAfterFilter.filter(course => matchQuery(query, course.dept + " " + course.number + "\n" + course.title + "\n" + course.description))
+        setCourses(coursesAfterFilter);
+        setAdditionalCourses([]);
+
+        setIsLoading(false);
+    }
+
     return (
         <>
             <div>
@@ -92,10 +143,11 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
 
                     <input
                         className="w-full py-2 mx-auto border-b border-stone-400 focus:outline-none focus:border-stone-600"
-                        placeholder={isSemanticSearch ? "I want to learn about machine learning and artificial intelligence." : '"haskell" or "rust"'}
+                        placeholder={isSemanticSearch ? "I want to learn about machine learning and artificial intelligence." : '"haskell" "rust" "240"'}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
-                                handleSemanticSearch(e.currentTarget.value);
+                                if (isSemanticSearch) handleSemanticSearch(e.currentTarget.value);
+                                else handleTextSearch(e.currentTarget.value);
                             }
                         }}
                     />
@@ -105,7 +157,7 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
 
             <div className="flex w-full gap-4 mx-8 text-xs">
                 <button
-                    data-tooltip="Plain basic search, matches exactly what you type. Quotation marks optional."
+                    data-tooltip="Plain basic search, matches exactly what you type. Quotation marks can be used to simultaneously search for multiple queries."
                     className={`${isSemanticSearch ? "text-stone-500 transition hover:bg-stone-500 hover:text-white" : "bg-stone-500 text-white"} border-2 border-stone-500 p-2 rounded-md`}
                     onClick={() => setIsSemanticSearch(false)}
                 >
@@ -118,7 +170,6 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
                 >
                     <span className={`inline-block p-2 px-4 rounded-md ${!isSemanticSearch && `bg-white hover:bg-transparent transition`}`}>Semantic search ✨</span>
                 </button>
-
 
                 <ToggleOptionsButton state={hideTaken} setState={setHideTaken} text="hide already taken courses" />
                 <ToggleOptionsButton state={hideUninterested} setState={setHideUninterested} text="hide uninterested courses" />
