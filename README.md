@@ -1,8 +1,23 @@
 # Frontend Challenge Fall '22
 
+Hello! I'm Laura. This is my submission to the challenge :D
+
+## Notes:
+
+- The graph view works perfectly as expected on first load, but for some reason, as soon as you click on a course OR go to a different page then back, it breaks? I don't know why. Spent a bunch of time on it, still don't know :/ If you want to fix it just hard reload the page then it's perfectly fine
+- All icon svgs are from the open-source [Heroicons](https://heroicons.com) library
+- I left my api key for cohere (the NLP model I used for semantic search) in the code for easier access/testing
+- The header underline on hover is meant to be the theme blue color and not black. I don't know how to fix it (but maybe I will after spending half an hour digging around the internet)
+- Feel free to reach out if you have any questions! I usually don't leave many comments in my code, especially in frameworks I'm comfortable with like React. So some things could potentially be confusing.
+- So it's 8am and I've been glued to this library chair since 7pm the evening before. I did not go to my dorm when my period arrived last night and I had no pad with me, because I thought, I'd be done in an hour. It's been "I'll be done in an hour" for like... since midnight. Anyways, this still isn't done. The checkout page isn't done (but you can kinda see what I was going for?). I didn't fix new linter errors and I left a bunch of console logs and an old file I don't need anymore. I didn't implement the check for 7 max courses in the cart. Although my brain is being like "it's just a dumb little check why don't you do it now and then submit," I think it's probably wiser to just submit it now. I am extremely exhausted and writing 2 lines of code per 10 minutes at this rate, and having my stomach hurting at the same time doesn't help. It physically hurts me to keep coding. I want to scream. My eyes are screaming, my stomach is screaming, even my neck is uncomfortable from looking down for too long ?? A sane person probaby would've given up earlier, and taken care of myself, you know, instead of sitting in the library with blood-soaked pants, but at 11 got a dream about this new feature I wanted to build... I guess this shows that I am very passionate... Anyways. This is totally on me for sleeping in on Saturday and starting a day later than I planned. I hate how I am late and still not done but, oh well, you take the Ls sometimes. I really do want to come back in a few days and finish this, if you still want to see it please let me know, but just, I don't think I can keep going right now. Hopefully you appreciate the features I did finish :)
+
+---
+
+# Original instructions:
+
 Welcome to the Penn Labs Frontend Challenge!
 
-If you have already done this challenge, there's a [section below](https://www.notion.so/Frontend-Challenge-Fall-22-d6c03559ee1d4f1f9f56aa6836b7caba) for you. 
+If you have already done this challenge, there's a [section below](https://www.notion.so/Frontend-Challenge-Fall-22-d6c03559ee1d4f1f9f56aa6836b7caba) for you.
 
 In this challenge, you will be building a product called Penn Course Cart in React! The goal of this challenge is for you to demonstrate:
 
@@ -15,7 +30,7 @@ More concretely, you will build an interface where users can explore computer sc
 ## Getting Started
 
 1. Copy this [repository](https://github.com/pennlabs/frontend-challenge) to your own GitHub account by clicking the green "use this template" button. You will have to make a Github account if you don't already have one. **Be sure to create a private repository.** **You will be submitting a ZIP file at the end of the technical.**
-2. [Clone](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) the repository you just made to your own computer. 
+2. [Clone](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) the repository you just made to your own computer.
 
 ```bash
 git clone https://github.com/pennlabs/frontend-challenge-f22.git
@@ -31,7 +46,7 @@ git clone https://github.com/pennlabs/frontend-challenge-f22.git
 
 ## General Structure
 
-We have provided minimal starter code with the following structure. 
+We have provided minimal starter code with the following structure.
 
 ```
 public/
@@ -55,66 +70,70 @@ src/                   Where the JS logic is
 
 ## Features
 
-Your application should implement the following features. 
+Your application should implement the following features.
 
 1. **Explore Courses**
-    
-    If you view `src/components/Courses.js`,  you'll see that it is rendering some of the courses data from `src/data/courses.json` What you need to do is design a more robust way to display this courses information. You should display all information contained in the JSON — though put some thought into how to go about doing this. For example, you might only want to show the description once the user clicks on the course.
-    
+
+   If you view `src/components/Courses.js`, you'll see that it is rendering some of the courses data from `src/data/courses.json` What you need to do is design a more robust way to display this courses information. You should display all information contained in the JSON — though put some thought into how to go about doing this. For example, you might only want to show the description once the user clicks on the course.
+
 2. **Search and Filter**
-    
-    At the minimum, the user should be able to:
-    
-    - Type into a search bar to find courses by title and description
-    - Filter courses based on number
+
+   At the minimum, the user should be able to:
+
+   - Type into a search bar to find courses by title and description
+   - Filter courses based on number
+
 3. **Add courses to your cart**
-    - A user should be able to add a subset of these courses to their cart. The user should not be able to add more than 7 courses to their cart.
-    - When a user adds a course, this addition should be reflected in:
-        - How that cart is rendered
-        - How that course is rendered (e.g. there should not still be a button to add that course to the cart, and maybe the text should be grayed out)
+   - A user should be able to add a subset of these courses to their cart. The user should not be able to add more than 7 courses to their cart.
+   - When a user adds a course, this addition should be reflected in:
+     - How that cart is rendered
+     - How that course is rendered (e.g. there should not still be a button to add that course to the cart, and maybe the text should be grayed out)
 4. **Checkout cart**
-    - Allow users to "checkout" their current cart, which takes the user to a new page, containing a "receipt" with the courses they checked out with. This should be implemented with routing, eg. with [React Router](https://reactrouter.com/en/main). The new page **must** show a different URL in the address bar and get the courses in the receipt using URL or query parameters.
+   - Allow users to "checkout" their current cart, which takes the user to a new page, containing a "receipt" with the courses they checked out with. This should be implemented with routing, eg. with [React Router](https://reactrouter.com/en/main). The new page **must** show a different URL in the address bar and get the courses in the receipt using URL or query parameters.
 5. **View cart**
-    - The user should be able to click a button to view their cart.
-        - If the cart has no items in it, tell the user that their cart is empty.
-        - If the cart has courses in it, display the courses and relevant information about them.
+   - The user should be able to click a button to view their cart.
+     - If the cart has no items in it, tell the user that their cart is empty.
+     - If the cart has courses in it, display the courses and relevant information about them.
 6. **Additional features**
-    
-    If you finish early, feel free to add an additional feature! Here are some ideas.
-    - Let users rank courses in order of preference using a drag and drop menu
-    - Integrate data from the Penn Courses server
-        - Note that we added the line `"proxy": "[https://penncourseplan.com](https://penncourseplan.com/)"` to `package.json`. This proxy will allow you to make requests to the Penn Courses backend without running into CORS issues.
-        - The [“Retrieve Course” endpoint](https://penncourseplan.com/api/documentation/#tag/PCx-Course/operation/Retrieve%20Course) should have all the data you need to add information for a specific course, but you are welcome to use any endpoint that doesn’t require authentication.
-        - Tip: use semesters from Spring 2022 and earlier - they will have 3-digit course codes that match the `courses.json` data.
-        - Example:
-    
-        ```jsx
-        fetch('/api/base/2022A/courses/CIS-120/')
-          .then(res => res.json())
-          .then(console.log);
-        ```
+
+   If you finish early, feel free to add an additional feature! Here are some ideas.
+
+   - Let users rank courses in order of preference using a drag and drop menu
+   - Integrate data from the Penn Courses server
+
+     - Note that we added the line `"proxy": "[https://penncourseplan.com](https://penncourseplan.com/)"` to `package.json`. This proxy will allow you to make requests to the Penn Courses backend without running into CORS issues.
+     - The [“Retrieve Course” endpoint](https://penncourseplan.com/api/documentation/#tag/PCx-Course/operation/Retrieve%20Course) should have all the data you need to add information for a specific course, but you are welcome to use any endpoint that doesn’t require authentication.
+     - Tip: use semesters from Spring 2022 and earlier - they will have 3-digit course codes that match the `courses.json` data.
+     - Example:
+
+     ```jsx
+     fetch("/api/base/2022A/courses/CIS-120/")
+       .then((res) => res.json())
+       .then(console.log);
+     ```
+
 7. **Code quality**
-    
-    These items are totally optional, but a great opportunity to demonstrate your engineering skills!
-    
-    - Turn on Typescript’s `strictNullChecks` and `noImplicitAny`
-    - Add a [linter](https://eslint.org/)
-    - Add unit or integration tests
+
+   These items are totally optional, but a great opportunity to demonstrate your engineering skills!
+
+   - Turn on Typescript’s `strictNullChecks` and `noImplicitAny`
+   - Add a [linter](https://eslint.org/)
+   - Add unit or integration tests
 
 ## Additional Tips
 
 - For styling, use whatever you want:
-    - CSS frameworks (Bulma, Bootstrap)
-    - CSS files (or SCSS)
-    - CSS modules
-    - CSS-in-JS
-    - `styled-components`
+  - CSS frameworks (Bulma, Bootstrap)
+  - CSS files (or SCSS)
+  - CSS modules
+  - CSS-in-JS
+  - `styled-components`
 - For state management, you have several options:
-    - Vanilla react state, props and [context managers](https://reactjs.org/docs/context.html)
-    - [Redux](https://redux.js.org/)
-    - [SWR](https://swr.vercel.app/)
+  - Vanilla react state, props and [context managers](https://reactjs.org/docs/context.html)
+  - [Redux](https://redux.js.org/)
+  - [SWR](https://swr.vercel.app/)
 - For navigation:
-    - React Router
+  - React Router
 
 ### **Getting help**
 

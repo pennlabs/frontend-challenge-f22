@@ -11,6 +11,7 @@ import CourseSidebar from "./components/CourseSidebar";
 import Nav from "./components/Nav";
 import courseData from "./data/courses.json";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 import Graph from "./pages/Ggraph";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
@@ -54,8 +55,9 @@ function App() {
                                 <div className="flex-grow" style={sidebarCourse ? { maxHeight: "calc(100vh - 88px)", overflowY: "auto", overflowX: "hidden" } : {}}>
                                     <Routes>
                                         <Route path="/" element={<Home />} />
-                                        <Route path="cart" element={<Cart />} />
                                         <Route path="graph" element={<Graph />} />
+                                        <Route path="cart" element={<Cart />} />
+                                        <Route path="checkout" element={<Checkout />} />
                                         <Route path="*" element={<NotFound />} />
                                     </Routes>
                                 </div>

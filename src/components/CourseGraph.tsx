@@ -32,7 +32,7 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
     const svgRef = useRef(null);
     const [width, setWidth] = useState<number>(600);
     const [height, setHeight] = useState<number>(400);
-    const { setSidebarCourse } = useContext(SidebarCourseContext);
+    const { sidebarCourse, setSidebarCourse } = useContext(SidebarCourseContext);
 
     // Calculate the out-degree for each course
     // (the number of courses that depend on it)
@@ -49,14 +49,17 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
         setSidebarCourse(courseData.find(c => c.number === course.id));
     }
 
+    console.log({ width, height, sidebarCourse, degreeMap })
+
     useEffect(() => {
         if (!svgRef.current) return;
 
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove(); // Clear the SVG for re-render
 
-        const width = document.body.getBoundingClientRect().width || 600;
+        const width = !sidebarCourse ? document.body.getBoundingClientRect().width || 600 : document.body.getBoundingClientRect().width - 672 || 600;
         const height = document.body.getBoundingClientRect().height - 88 || 400;
+        console.log({ width, height })
         setWidth(width);
         setHeight(height);
 
@@ -166,7 +169,11 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
                 .on("end", dragended);
         }
 
-    }, [courses, prerequisites]);
+        return () => {
+            simulation.stop(); // Stop the simulation when the component unmounts
+        };
+
+    }, [courses, prerequisites, !!sidebarCourse]);
 
     return <svg ref={svgRef} width={width} height={height}></svg>;
 }
