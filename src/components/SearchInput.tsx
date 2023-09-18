@@ -14,11 +14,19 @@ function semanticSimilarity(a: number[], b: number[]) {
     return dot(aEmbed, bEmbed) / (norm(aEmbed) * norm(bEmbed));
 }
 
-const SearchInput = ({ courseData, courses, setCourses, setCourses2 }: { courseData: Course[], courses: Course[], setCourses: Dispatch<SetStateAction<Course[]>>, setCourses2: Dispatch<SetStateAction<Course[]>> }) => {
+const SearchInput = ({ courseData, courses, setCourses, setCourses2, setIsLoading }:
+    {
+        courseData: Course[],
+        courses: Course[],
+        setCourses: Dispatch<SetStateAction<Course[]>>,
+        setCourses2: Dispatch<SetStateAction<Course[]>>,
+        setIsLoading: Dispatch<SetStateAction<boolean>>
+    }) => {
 
     const [isSemanticSearch, setIsSemanticSearch] = useState(false);
 
     function handleSemanticSearch(query: string) {
+        setIsLoading(true);
 
         const options = {
             method: 'POST',
@@ -39,7 +47,6 @@ const SearchInput = ({ courseData, courses, setCourses, setCourses2 }: { courseD
                 const courseEmbeddings: number[][] = response.data.embeddings.slice(1);
 
                 const similarities = courseEmbeddings.map(courseEmbedding => semanticSimilarity(queryEmbedding, courseEmbedding));
-                // console.log(similarities)
 
                 const coursesWithSimilarities = courseData.map((course, i) => ({ ...course, similarity: similarities[i] }));
 
@@ -51,6 +58,7 @@ const SearchInput = ({ courseData, courses, setCourses, setCourses2 }: { courseD
                 const filteredCourses2 = sortedCourses.filter(course => course.similarity < 0.45 && course.similarity >= 0.3);
                 setCourses(filteredCourses);
                 setCourses2(filteredCourses2);
+                setIsLoading(false);
 
             })
             .catch(function (error) {
@@ -78,27 +86,23 @@ const SearchInput = ({ courseData, courses, setCourses, setCourses2 }: { courseD
                 </div>
                 <p className='text-stone-400 text-right px-8 mt-3'>Enter to search</p>
             </div >
-            <div className='flex w-full'>
-                <div >
-                    <p className='text-stone-400'>Showing {courses.length} results</p>
-                </div>
-                <div className='flex gap-4'>
-                    <button
-                        data-tooltip="Plain basic search, matches exactly what you type"
-                        className={`${isSemanticSearch ? "text-stone-500 transition hover:bg-stone-500 hover:text-white" : "bg-stone-500 text-white"} border-2 border-stone-500 p-2 rounded-md`}
-                        onClick={() => setIsSemanticSearch(false)}
-                    >
-                        Text search
-                    </button>
-                    <button
-                        data-tooltip="AI-powered search, ranks courses based on semantic similarity to your query"
-                        className='rainbow-border text-gray-700'
-                        onClick={() => setIsSemanticSearch(true)}
-                    >
-                        <span className={`inline-block p-2 px-4 rounded-md ${!isSemanticSearch && `bg-white hover:bg-transparent transition`}`}>Semantic search ✨</span>
-                    </button>
 
-                </div>
+            <div className='flex w-full gap-4'>
+                <button
+                    data-tooltip="Plain basic search, matches exactly what you type"
+                    className={`${isSemanticSearch ? "text-stone-500 transition hover:bg-stone-500 hover:text-white" : "bg-stone-500 text-white"} border-2 border-stone-500 p-2 rounded-md`}
+                    onClick={() => setIsSemanticSearch(false)}
+                >
+                    Text search
+                </button>
+                <button
+                    data-tooltip="AI-powered search, ranks courses based on semantic similarity to your query"
+                    className='rainbow-border text-gray-700'
+                    onClick={() => setIsSemanticSearch(true)}
+                >
+                    <span className={`inline-block p-2 px-4 rounded-md ${!isSemanticSearch && `bg-white hover:bg-transparent transition`}`}>Semantic search ✨</span>
+                </button>
+
             </div>
         </>
     )
