@@ -50,8 +50,8 @@ function App() {
                             <Nav />
 
                             {/* Routes */}
-                            <div className="flex w-screen overflow-auto">
-                                <div>
+                            <div className="flex w-screen">
+                                <div style={sidebarCourse ? { maxHeight: "calc(100vh - 88px)", overflowY: "scroll", overflowX: "hidden" } : {}}>
                                     <Routes>
                                         <Route path="/" element={<Home />} />
                                         <Route path="cart" element={<Cart />} />

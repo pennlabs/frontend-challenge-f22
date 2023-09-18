@@ -1,11 +1,37 @@
 import { useContext } from "react"
+import Skeleton from "react-loading-skeleton"
 import useSWR from "swr"
 import { Course, CoursePreferencesContext, DetailedCourse, fetcher } from "../utils"
-import { CornerMenu } from "./Courses"
+
+
+const ShoppingCartIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+        <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
+    </svg>
+)
+
+const MinusCircleIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+)
+
+const CheckmarkCircleIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+)
+
+const PlusIcon = () => (
+    < svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} className="w-6 h-6 stroke-current" >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+    </svg >
+)
 
 const CourseSidebar = ({ course }: { course: Course }) => {
-    const { data, error, isLoading } = useSWR<DetailedCourse[]>(`/api/base/2022A/courses/CIS-${course.number}`, fetcher)
-    console.log(data, error, isLoading)
+    const { data, error, isLoading } = useSWR<DetailedCourse>(`/api/base/2022A/courses/CIS-${course.number}`, fetcher)
+    // @ts-ignore - api returns { detail: "Not found." } when error
+    const success = data && data?.detail !== "Not found.";
 
     const { coursePreferences, setCoursePreferences } = useContext(CoursePreferencesContext);
     const status = coursePreferences[course.number];
@@ -14,9 +40,9 @@ const CourseSidebar = ({ course }: { course: Course }) => {
 
 
     return (
-        <div className="h-screen z-50 w-screen absolute bg-purple-400">
+        <div className="z-30 absolute border-l-4 border-stone-400 shadow-lg px-8 overflow-y-scroll" style={{ height: "calc(100vh - 88px" }}>
             <div
-                className={``}
+                className={`my-16 relative`}
             >
                 {/* Design pattern of putting absolute elments in relative parents allows stacking of elements with the same size */}
                 {/* One child of the relative parent is static (in this case, coursecard) which determines the size of the container */}
@@ -34,14 +60,6 @@ const CourseSidebar = ({ course }: { course: Course }) => {
 
                 )}
 
-                {/* The cornermenu is taken out of the static container because we do not want hovering the button to cause hover events */}
-                {/* for the container */}
-                <div className="absolute w-full top-0 left-0 flex">
-                    <div className="ml-auto">
-                        <CornerMenu course={course} />
-                    </div>
-                </div>
-
                 <div className="">
                     <div className="flex gap-8">
                         <div>
@@ -50,7 +68,7 @@ const CourseSidebar = ({ course }: { course: Course }) => {
                                 {" "}
                                 {number}
                             </p>
-                            <h2 className={`text-4xl ibm-plex-mono`}>
+                            <h2 className={`text-4xl ibm-plex-mono font-light`}>
                                 {title}
                             </h2>
                         </div>
@@ -59,12 +77,12 @@ const CourseSidebar = ({ course }: { course: Course }) => {
                         <div className="h-10 w-24 shrink-0 ml-auto"></div>
                     </div>
 
-                    <p className="mt-2 text-stone-500">
+                    <p className="mt-6 text-stone-500 text-lg">
                         {description}
                     </p>
 
                     {prereqs && (
-                        <p className="my-1 text-stone-500">
+                        <p className="my-6 text-stone-400">
                             Prerequisites:
                             {" "}
                             {prereqs.map((prereq, i) => (
@@ -76,7 +94,7 @@ const CourseSidebar = ({ course }: { course: Course }) => {
                         </p>
                     )}
                     {crossListed && (
-                        <p className="my-1 text-stone-500">
+                        <p className="my-6 text-stone-400">
                             Crosslisted as:
                             {" "}
                             {crossListed.map((prereq, i) => (
@@ -86,6 +104,129 @@ const CourseSidebar = ({ course }: { course: Course }) => {
                                 </span>
                             ))}
                         </p>
+                    )}
+
+                    <div className="my-16 text-lg text-stone-500 w-full relative">
+                        <div className="absolute top-0 text-upenn-blue opacity-20 flex flex-col gap-3 -mt-6" style={{ zIndex: -2 }}>
+                            <p className="uppercase ibm-plex-mono text-xs">[Data from Penn Course Review]</p>
+                            <p className="uppercase ibm-plex-mono text-xs">[Data from Penn Course Review]</p>
+                            <p className="uppercase ibm-plex-mono text-xs">[Data from Penn Course Review]</p>
+                            <p className="uppercase ibm-plex-mono text-xs">[Data from Penn Course Review]</p>
+                            <p className="uppercase ibm-plex-mono text-xs">[Data from Penn Course Review]</p>
+                        </div>
+                        <p className="mb-6">Course quality:
+                            {" "}
+                            {data ? (
+                                <span className="mx-2 px-3 py-2 border-2 border-stone-500 rounded-lg">{data.course_quality || "N/A"}</span>
+                            ) : (
+                                isLoading ? (
+                                    <Skeleton width={70} height={30} />
+                                ) : (
+                                    <span className="mx-2 px-3 py-2 border-2 border-stone-500 rounded-lg">N/A</span>
+                                )
+                            )}
+                        </p>
+                        <p className="my-6">Instructor quality:
+                            {" "}
+                            {success ? (
+                                <span className="mx-2 px-3 py-2 border-2 border-stone-500 rounded-lg">{data.instructor_quality || "N/A"}</span>
+                            ) : (
+                                isLoading ? (
+                                    <Skeleton width={70} height={30} />
+                                ) : (
+                                    <span className="mx-2 px-3 py-2 border-2 border-stone-500 rounded-lg">N/A</span>
+                                )
+                            )}
+                        </p>
+                    </div>
+
+                    {status === "cart" ? (
+                        <div className="mt-40">
+                            <div className="flex gap-2 mb-4">
+                                <CheckmarkCircleIcon />
+                                <span>This course is in your cart</span>
+                            </div>
+
+                            <div className="flex gap-4 mt-8">
+                                <button className="p-4 text-white bg-upenn-blue hover:bg-black rounded-lg flex items-center gap-2 text-sm transition">
+                                    <ShoppingCartIcon />
+                                    <span>View cart</span>
+                                </button>
+
+                                <button className="p-4 text-upenn-red hover:text-white hover:bg-upenn-red border-2 border-upenn-red rounded-lg flex items-center gap-2 text-sm transition">
+                                    {/* minus circle icon */}
+                                    <MinusCircleIcon />
+                                    <span>
+                                        Remove course from cart
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    ) : status === "none" ? (
+                        <div className="flex gap-4 mt-40">
+                            <button className="p-4 text-white bg-upenn-blue hover:bg-black rounded-lg flex items-center gap-2 text-sm transition">
+                                <PlusIcon />
+                                <span>Add to cart</span>
+                            </button>
+
+                            <button className="p-4 text-upenn-blue hover:text-white hover:bg-upenn-blue border-2 border-upenn-blue rounded-lg flex items-center gap-2 text-sm transition">
+                                <ShoppingCartIcon />
+                                <span>
+                                    View cart
+                                </span>
+                            </button>
+                        </div>
+                    ) : (
+                        status === "taken" ? (
+                            <div className="mt-40">
+                                <div className="flex gap-2 mb-4 text-green-600">
+                                    <CheckmarkCircleIcon />
+                                    <span>
+                                        You already took this class
+                                    </span>
+                                </div>
+
+                                <div className="flex gap-4 mt-8">
+                                    <button className="p-4 text-upenn-red hover:text-white hover:bg-upenn-red border-2 border-upenn-red rounded-lg flex items-center gap-2 text-sm transition">
+                                        <MinusCircleIcon />
+                                        <span>
+                                            Remove from taken courses
+                                        </span>
+                                    </button>
+
+                                    <button className="p-4 text-white bg-upenn-blue hover:bg-black rounded-lg flex items-center gap-2 text-sm transition">
+                                        <ShoppingCartIcon />
+                                        <span>View cart</span>
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            // status must be uninterested
+                            <div className="mt-40">
+                                <div className="flex gap-2 mb-4 text-upenn-red">
+                                    <MinusCircleIcon />
+                                    <span>
+                                        You marked this class as uninterested
+                                    </span>
+                                </div>
+
+                                <div className="flex gap-4 mt-8">
+                                    <button className="p-4 text-upenn-blue hover:text-white hover:bg-upenn-blue border-2 border-upenn-blue rounded-lg flex items-center gap-2 text-sm transition">
+                                        <MinusCircleIcon />
+                                        <span>
+                                            Remove from uninterested courses
+                                        </span>
+                                    </button>
+
+                                    <button className="p-4 text-white bg-upenn-blue hover:bg-black rounded-lg flex items-center gap-2 text-sm transition">
+                                        <ShoppingCartIcon />
+                                        <span>
+                                            View cart
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        )
                     )}
                 </div>
             </div >

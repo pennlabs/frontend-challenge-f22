@@ -28,7 +28,7 @@ const Nav = () => {
             <div className="absolute w-full top-0 left-0 bg-upenn-red h-[88px] z-30" />
 
             {/* a div the same size of the navbar that is statically-positioned so that elements after the nav are not overlapping. */}
-            <div className="h-20 -mt-4"></div>
+            <div className="h-[88px]"></div>
         </>
     )
 }

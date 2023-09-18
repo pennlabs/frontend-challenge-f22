@@ -93,7 +93,7 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
 
                     <input
                         className="w-full py-2 mx-auto border-b border-stone-400 focus:outline-none focus:border-stone-600"
-                        placeholder="I want to learn about machine learning and artificial intelligence."
+                        placeholder={isSemanticSearch ? "I want to learn about machine learning and artificial intelligence." : '"haskell" or "rust"'}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                                 handleSemanticSearch(e.currentTarget.value);
@@ -101,12 +101,12 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
                         }}
                     />
                 </div>
-                <p className="text-stone-400 text-right px-8 mt-3">Enter to search</p>
+                <p className="text-stone-400 text-right px-8 mt-3 text-xs">Enter to search</p>
             </div >
 
-            <div className="flex w-full gap-4 mx-8">
+            <div className="flex w-full gap-4 mx-8 text-xs">
                 <button
-                    data-tooltip="Plain basic search, matches exactly what you type"
+                    data-tooltip="Plain basic search, matches exactly what you type. Quotation marks optional."
                     className={`${isSemanticSearch ? "text-stone-500 transition hover:bg-stone-500 hover:text-white" : "bg-stone-500 text-white"} border-2 border-stone-500 p-2 rounded-md`}
                     onClick={() => setIsSemanticSearch(false)}
                 >
