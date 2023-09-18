@@ -59,8 +59,9 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
 
         const simulation = d3.forceSimulation(courses)
             .force("link", d3.forceLink(prerequisites).id((d: Course) => d.id).distance(100))
-            .force("charge", d3.forceManyBody().strength(-200))
-            .force("center", d3.forceCenter(width / 2, height / 2));
+            .force("charge", d3.forceManyBody().strength(-800)) // force that pushes nodes apart
+            .force("center", d3.forceCenter(width / 2, height / 2)) // default is 0.1
+            .force("collide", d3.forceCollide().radius(20)) // to prevent nodes from overlapping
 
         // Add one line for each prerequisite
         const link = svg.append("g")
@@ -84,7 +85,7 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
             .selectAll("circle")
             .data(courses)
             .join("circle")
-            .attr("r", (d: Course) => 20 + (degreeMap[d.id] || 0) * 5)  // Adjust node size based on out-degree. Base size is 20, and grows by 5 units for each additional degree.
+            .attr("r", (d: Course) => 20 + (degreeMap[d.id] || 0) * 10)  // Adjust node size based on out-degree. Base size is 20, and grows by 10 units for each additional degree.
             .attr("fill", "#011F5B") // UPenn blue
             .style("filter", "url(#glow)")
             .call(drag(simulation));
@@ -95,7 +96,7 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
             .data(courses)
             .join("text")
             .attr("text-anchor", "middle")
-            .attr("dy", (d: Course) => 40 + (degreeMap[d.id] || 0) * 5) // shift text down
+            .attr("dy", (d: Course) => 40 + (degreeMap[d.id] || 0) * 10) // shift text down
             .attr("font-size", "0.8em")
             .attr("fill", "#a8a29e") // tailwind stone 400
             .text((d: Course) => d.label);
