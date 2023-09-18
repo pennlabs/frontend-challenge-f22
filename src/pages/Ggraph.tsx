@@ -1,6 +1,6 @@
-import CourseGraph from '../components/CourseGraph';
-import courseData from '../data/courses.json';
-import prerequisites from '../data/prerequisites.json';
+import CourseGraph from "../components/CourseGraph";
+import courseData from "../data/courses.json";
+import prerequisites from "../data/prerequisites.json";
 
 function App() {
     return (
