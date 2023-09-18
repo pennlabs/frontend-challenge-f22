@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import { useEffect, useRef, useState } from 'react';
 
-function CourseGraph({ courses, prerequisites }) {
+function CourseGraph({ courses, prerequisites }: { courses: { id: number, label: string }[], prerequisites: { source: number, target: number }[] }) {
     const svgRef = useRef(null);
     const [width, setWidth] = useState<number>(600);
     const [height, setHeight] = useState<number>(400);
@@ -49,7 +49,6 @@ function CourseGraph({ courses, prerequisites }) {
             .selectAll("line")
             .data(prerequisites)
             .join("line")
-            .attr("marker-end", "url(#arrow)"); // Attach the arrow marker to the end of the line
 
         // Filter for the nodes' outside glow
         const filter = svg.append('defs').append('filter')
@@ -76,7 +75,7 @@ function CourseGraph({ courses, prerequisites }) {
             .data(courses)
             .join("text")
             .attr("text-anchor", "middle")
-            .attr("dy", "2.5em") // shift text down
+            .attr("dy", d => 40 + (degreeMap[d.id] || 0) * 5) // shift text down
             .attr("font-size", "0.8em")
             .attr("fill", "#a8a29e") // tailwind stone 400
             .text(d => d.label);
