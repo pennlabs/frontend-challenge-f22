@@ -8,9 +8,9 @@ import { useState } from "react";
 import { ToastProvider } from "react-toast-notifications";
 import "./App.css";
 import Nav from "./components/Nav";
-import courseData from './data/courses.json';
-import Home from './pages/Home';
-import NotFound from './pages/NotFound';
+import courseData from "./data/courses.json";
+import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
 import { CoursePreference, CoursePreferencesContext } from "./utils";
 
 
@@ -25,7 +25,7 @@ function App() {
 
     return (
         <ToastProvider
-            placement='top-center'
+            placement="top-center"
         >
             <CoursePreferencesContext.Provider value={{ coursePreferences: initialCoursePreferences, setCoursePreferences: setCoursePreferences }}>
                 <Router>coursePreferences

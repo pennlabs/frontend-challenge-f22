@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { Dispatch, SetStateAction, useContext, useState } from 'react';
-import courseData from '../data/courses.json';
-import { Course, CoursePreferencesContext } from '../utils';
+import axios from "axios";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
+import courseData from "../data/courses.json";
+import { Course, CoursePreferencesContext } from "../utils";
 
 
 function semanticSimilarity(a: number[], b: number[]) {
@@ -45,14 +45,14 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
         if (hideI) coursesAfterFilter.filter(course => coursePreferences[course.number] !== "uninterested");
 
         const options = {
-            method: 'POST',
-            url: 'https://api.cohere.ai/v1/embed',
+            method: "POST",
+            url: "https://api.cohere.ai/v1/embed",
             headers: {
-                accept: 'application/json',
-                'content-type': 'application/json',
-                authorization: 'Bearer 0raSpWg7qGJC9WMO98zGGlrpx7O9onxj2k5Hccfh'
+                accept: "application/json",
+                "content-type": "application/json",
+                authorization: "Bearer 0raSpWg7qGJC9WMO98zGGlrpx7O9onxj2k5Hccfh"
             },
-            data: { texts: [query, ...coursesAfterFilter.map(course => course.title + "\n" + course.description)], truncate: 'END' }
+            data: { texts: [query, ...coursesAfterFilter.map(course => course.title + "\n" + course.description)], truncate: "END" }
         };
 
         axios
@@ -66,9 +66,9 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
 
                 const coursesWithSimilarities = courseData.map((course, i) => ({ ...course, similarity: similarities[i] }));
 
-                console.time('sorting');
+                console.time("sorting");
                 const sortedCourses = coursesWithSimilarities.sort((a, b) => b.similarity - a.similarity);
-                console.timeEnd('sorting');
+                console.timeEnd("sorting");
 
                 const filteredCourses = sortedCourses.filter(course => course.similarity >= 0.45);
                 const filteredCourses2 = sortedCourses.filter(course => course.similarity < 0.45 && course.similarity >= 0.3);
@@ -84,26 +84,26 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
     return (
         <>
             <div>
-                <div className='flex items-center w-full px-8 gap-4'>
+                <div className="flex items-center w-full px-8 gap-4">
                     {/* magnifying glass svg */}
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} className="w-6 h-6 stroke-stone-400">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                     </svg>
 
                     <input
-                        className='w-full py-2 mx-auto border-b border-stone-400 focus:outline-none focus:border-stone-600'
+                        className="w-full py-2 mx-auto border-b border-stone-400 focus:outline-none focus:border-stone-600"
                         placeholder="I want to learn about machine learning and artificial intelligence."
                         onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
+                            if (e.key === "Enter") {
                                 handleSemanticSearch(e.currentTarget.value);
                             }
                         }}
                     />
                 </div>
-                <p className='text-stone-400 text-right px-8 mt-3'>Enter to search</p>
+                <p className="text-stone-400 text-right px-8 mt-3">Enter to search</p>
             </div >
 
-            <div className='flex w-full gap-4 mx-8'>
+            <div className="flex w-full gap-4 mx-8">
                 <button
                     data-tooltip="Plain basic search, matches exactly what you type"
                     className={`${isSemanticSearch ? "text-stone-500 transition hover:bg-stone-500 hover:text-white" : "bg-stone-500 text-white"} border-2 border-stone-500 p-2 rounded-md`}
@@ -113,7 +113,7 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
                 </button>
                 <button
                     data-tooltip="AI-powered search, ranks courses based on semantic similarity to your query"
-                    className='rainbow-border text-gray-700'
+                    className="rainbow-border text-gray-700"
                     onClick={() => setIsSemanticSearch(true)}
                 >
                     <span className={`inline-block p-2 px-4 rounded-md ${!isSemanticSearch && `bg-white hover:bg-transparent transition`}`}>Semantic search ✨</span>

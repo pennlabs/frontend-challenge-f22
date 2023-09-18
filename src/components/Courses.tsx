@@ -1,7 +1,7 @@
-import { useContext, useState } from 'react';
-import { useToasts } from 'react-toast-notifications';
-import useSWR from 'swr';
-import { Course, CoursePreferencesContext, fetcher } from '../utils';
+import { useContext, useState } from "react";
+import { useToasts } from "react-toast-notifications";
+import useSWR from "swr";
+import { Course, CoursePreferencesContext, fetcher } from "../utils";
 
 
 const Courses = ({ courses }: { courses: Course[] }) => {
@@ -47,10 +47,10 @@ function CourseCard({ course }: { course: Course }) {
             return newCoursePreferences;
         });
 
-        addToast(<p className='bg-upenn-blue'>Added CIS {number} to cart! <a className="underline" href="https://lauragao.ca">View cart</a></p>, {
-            appearance: 'success',
+        addToast(<p className="bg-upenn-blue">Added CIS {number} to cart! <a className="underline" href="https://lauragao.ca">View cart</a></p>, {
+            appearance: "success",
             autoDismiss: true,
-            placement: 'top-center',
+            placement: "top-center",
         });
     }
 
@@ -70,7 +70,7 @@ function CourseCard({ course }: { course: Course }) {
                 <div>
                     <p className="font-bold uppercase text-sm text-stone-400">
                         {dept}
-                        {' '}
+                        {" "}
                         {number}
                     </p>
                     <h2 className="font-bold text-3xl">
@@ -80,7 +80,7 @@ function CourseCard({ course }: { course: Course }) {
 
                 <div className="flex flex-row gap-4 ml-auto">
                     {!(status === "taken" || status === "uninterested") && <button
-                        className='w-10 h-10 rounded-md p-2 bg-stone-200 hover:bg-stone-400 transition-colors'
+                        className="w-10 h-10 rounded-md p-2 bg-stone-200 hover:bg-stone-400 transition-colors"
                         onClick={() => handleAddToCart(number)}
                         data-tooltip={status === "cart" ? "View cart" : "Add to cart"}
                     >
@@ -91,7 +91,7 @@ function CourseCard({ course }: { course: Course }) {
                             </svg>
                         ) : (
                             /* plus sign svg */
-                            <svg className='w-full h-full' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12 5V19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 <path d="M5 12H19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
@@ -99,15 +99,15 @@ function CourseCard({ course }: { course: Course }) {
                         )}
                     </button>}
 
-                    <div className='relative'>
+                    <div className="relative">
                         {/* menu */}
-                        <button className='menu-icon w-10 h-10'>
+                        <button className="menu-icon w-10 h-10">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>
                         </button>
 
-                        <div className='absolute bg-white text-sm text-left hidden menu'>
+                        <div className="absolute bg-white text-sm text-left hidden menu">
                             <button className="flex p-2 hover:bg-stone-50" onClick={handleMarkAsTaken}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -115,7 +115,7 @@ function CourseCard({ course }: { course: Course }) {
 
                                 Mark as taken
                             </button>
-                            <button className='flex p-2 hover:bg-stone-50' onClick={handleMarkAsUninterested}>
+                            <button className="flex p-2 hover:bg-stone-50" onClick={handleMarkAsUninterested}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                                 </svg>
@@ -136,10 +136,10 @@ function CourseCard({ course }: { course: Course }) {
                 prereqs && (
                     <p className="my-1 text-stone-500">
                         Prerequisites:
-                        {' '}
+                        {" "}
                         {prereqs.map((prereq, i) => (
                             <span key={prereq}>
-                                {i > 0 && ', '}
+                                {i > 0 && ", "}
                                 {prereq}
                             </span>
                         ))}
