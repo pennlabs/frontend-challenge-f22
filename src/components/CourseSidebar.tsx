@@ -198,14 +198,34 @@ const CourseSidebar = ({ course }: { course: Course }) => {
                             </div>
                         </div>
                     ) : status === "none" ? (
-                        <div className="flex items-center gap-4 mt-40">
-                            <PrimaryButton onClick={() => handleChangeStatus("cart")}>
-                                <PlusIcon />
-                                <span>Add to cart</span>
-                            </PrimaryButton>
+                        <>
+                            <div className="flex items-center gap-4 mt-40 justify-around">
+                                <PrimaryButton onClick={() => handleChangeStatus("cart")}>
+                                    <PlusIcon />
+                                    <span>Add to cart</span>
+                                </PrimaryButton>
 
-                            <ViewCartButton type="secondary" />
-                        </div>
+                                <button
+                                    onClick={() => handleChangeStatus("taken")}
+                                    className="p-4 text-green-500 hover:text-white hover:bg-green-500 border-2 border-green-500 rounded-lg flex items-center gap-2 text-sm transition"
+                                >
+                                    <CheckmarkCircleIcon />
+                                    <span>I have taken this course</span>
+                                </button>
+
+                                <DeleteButton onClick={() => handleChangeStatus("uninterested")}>Not interested in this course</DeleteButton>
+
+                            </div>
+                            <div className="mt-20 w-full">
+                                <Link to="/cart" className="w-full">
+                                    <button className="w-full rounded-full p-4 text-upenn-blue border-2 hover:border-upenn-blue border-transparent flex items-center justify-center gap-2 text-sm transition">
+                                        <ShoppingCartIcon />
+                                        <span>View cart</span>
+                                    </button>
+                                </Link>
+                                {/* <ViewCartButton type="secondary" /> */}
+                            </div>
+                        </>
                     ) : (
                         status === "taken" ? (
                             <div className="mt-40">
