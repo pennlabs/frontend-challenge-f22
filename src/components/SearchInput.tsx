@@ -40,10 +40,9 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
             return;
         }
 
-        // eslint-disable-next-line prefer-const
         let coursesAfterFilter = courseData;
-        if (hideTaken) coursesAfterFilter.filter(course => coursePreferences[course.number] !== "taken");
-        if (hideUninterested) coursesAfterFilter.filter(course => coursePreferences[course.number] !== "uninterested");
+        if (hideTaken) coursesAfterFilter = coursesAfterFilter.filter(course => coursePreferences[course.number] !== "taken");
+        if (hideUninterested) coursesAfterFilter = coursesAfterFilter.filter(course => coursePreferences[course.number] !== "uninterested");
 
         const options = {
             method: "POST",
@@ -120,22 +119,24 @@ const SearchInput = ({ setCourses, setAdditionalCourses, setIsLoading }:
                     <span className={`inline-block p-2 px-4 rounded-md ${!isSemanticSearch && `bg-white hover:bg-transparent transition`}`}>Semantic search ✨</span>
                 </button>
 
-                <button onClick={() => setHideTaken(prev => !prev)}>
-                    hide already taken courses
-                </button>
 
-                <button onClick={() => setHideUninterested(prev => !prev)} className={"flex items-center gap-4 " + hideUninterested ? "rounded-full border-2 border-upenn-blue" : ""}>
-                    {hideUninterested && (
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                        </svg>
-                    )}
-                    hide uninterested courses
-                </button>
+                <ToggleOptionsButton state={hideTaken} setState={setHideTaken} text="hide already taken courses" />
+                <ToggleOptionsButton state={hideUninterested} setState={setHideUninterested} text="hide uninterested courses" />
 
             </div>
         </>
     )
 }
+
+const ToggleOptionsButton = ({ state, setState, text }: { state: boolean, setState: Dispatch<SetStateAction<boolean>>, text: string }) => (
+    <button onClick={() => setState(prev => !prev)} className={"flex items-center gap-4 rounded-full px-3 text-upenn-blue border-2 border-upenn-blue " + (state ? "text-white bg-upenn-blue" : "")}>
+        {state && (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+        )}
+        <span>{text}</span>
+    </button>
+)
 
 export default SearchInput
