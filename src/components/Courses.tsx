@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Course, CoursePreferencesContext, SidebarCourseContext } from "../utils";
 
@@ -125,7 +126,7 @@ export const CornerMenu = ({ course }: { course: Course }) => {
             return newCoursePreferences;
         });
 
-        addToast(<p className="bg-upenn-blue">Added CIS {number} to cart! <a className="underline" href="https://lauragao.ca">View cart</a></p>, {
+        addToast(<p>Added CIS {number} to cart! <a className="underline" href="https://lauragao.ca">View cart</a></p>, {
             appearance: "success",
             autoDismiss: true,
             placement: "top-center",
@@ -137,24 +138,32 @@ export const CornerMenu = ({ course }: { course: Course }) => {
         // width: button + gap + button = 10 + 4 + 10 = 24
         // height: button = 10
         <div className="flex flex-row gap-4">
-            {!isGreyedOut && <button
-                className="w-10 h-10 rounded-md p-2 bg-stone-200 hover:bg-stone-400 transition-colors"
-                onClick={() => handleAddToCart(number)}
-                data-tooltip={status === "cart" ? "View cart" : "Add to cart"}
-            >
-                {status === "cart" ? (
-                    // shopping cart svg
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-6 h-6">
-                        <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
-                    </svg>
+            {!isGreyedOut && (
+                status === "cart" ? (
+                    <Link
+                        to="/cart"
+                        data-tooltip="View cart"
+                        className="w-10 h-10 p-2 rounded-md bg-stone-200 hover:bg-stone-400 transition-colors"
+                    >
+                        {/* shopping cart svg */}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-6 h-6">
+                            <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
+                        </svg>
+                    </Link>
                 ) : (
-                    /* plus sign svg */
-                    <svg className="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 5V19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M5 12H19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                )}
-            </button>}
+                    <button
+                        className="w-10 h-10 p-2 rounded-md bg-stone-200 hover:bg-stone-400 transition-colors"
+                        onClick={() => handleAddToCart(number)}
+                        data-tooltip={"Add to cart"}
+                    >
+                        {/* plus sign svg */}
+                        < svg className="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 5V19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M5 12H19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </button>
+                )
+            )}
 
             <div className="relative">
                 {/* menu */}
@@ -186,6 +195,6 @@ export const CornerMenu = ({ course }: { course: Course }) => {
                 )}
 
             </div>
-        </div>
+        </div >
     )
 }

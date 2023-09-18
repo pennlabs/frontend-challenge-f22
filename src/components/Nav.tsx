@@ -4,7 +4,7 @@ import { CoursePreferencesContext } from "../utils";
 
 {/* height of the navbar = height of content + 2*py = 48px + 2*16px = 80px = h-20 (tailwind) */ }
 const Nav = () => {
-    const coursePreferences = useContext(CoursePreferencesContext);
+    const { coursePreferences } = useContext(CoursePreferencesContext);
     return (
         <>
             <div className="w-full bg-upenn-blue text-white py-4 px-8 fixed z-50 top-0" style={{

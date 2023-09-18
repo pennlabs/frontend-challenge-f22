@@ -51,7 +51,7 @@ function App() {
 
                             {/* Routes */}
                             <div className="flex w-screen">
-                                <div className="flex-grow" style={sidebarCourse ? { maxHeight: "calc(100vh - 88px)", overflowY: "scroll", overflowX: "hidden" } : {}}>
+                                <div className="flex-grow" style={sidebarCourse ? { maxHeight: "calc(100vh - 88px)", overflowY: "auto", overflowX: "hidden" } : {}}>
                                     <Routes>
                                         <Route path="/" element={<Home />} />
                                         <Route path="cart" element={<Cart />} />

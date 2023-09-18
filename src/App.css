@@ -53,6 +53,7 @@
   white-space: nowrap;
   z-index: 30;
   pointer-events: none;
+  font-size: smaller;
 }
 
 .menu-icon:hover + .menu, .menu:hover {
