@@ -2,7 +2,9 @@
 // my d3 code is not typed properly, so we have to disable type checking for this file :/
 import * as d3 from "d3";
 import { D3DragEvent, Simulation } from "d3";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import courseData from "../data/courses.json";
+import { SidebarCourseContext } from "../utils";
 
 
 type DegreeMap = { [key: number]: number };
@@ -30,6 +32,7 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
     const svgRef = useRef(null);
     const [width, setWidth] = useState<number>(600);
     const [height, setHeight] = useState<number>(400);
+    const { setSidebarCourse } = useContext(SidebarCourseContext);
 
     // Calculate the out-degree for each course
     // (the number of courses that depend on it)
@@ -43,7 +46,7 @@ function CourseGraph({ courses, prerequisites }: { courses: Course[], prerequisi
         // I want to display a screen on the right that contains course information and allows you to add it to cart and etc.
         // It should contain the course number, title, description, prereqs, and coreqs. It should also have a button to add it to cart.
 
-
+        setSidebarCourse(courseData.find(c => c.number === course.id));
     }
 
     useEffect(() => {
