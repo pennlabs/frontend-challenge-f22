@@ -43,7 +43,7 @@
   position: absolute;
   transform: translateX(2rem);
   background-color: white;
-  z-index: 50;
+  z-index: 40;
   color: black;
   border: 1px solid black;
   padding: 4px 8px;
