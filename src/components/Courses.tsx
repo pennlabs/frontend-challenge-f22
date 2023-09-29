@@ -19,7 +19,9 @@ const Courses = () => {
     const updatedCart = [...cart];
     updatedCart[courseIndex] = !updatedCart[courseIndex]; // Toggle the state
     setCart(updatedCart);
-    if (!updatedCart[courseIndex]) {
+    if (updatedCart[courseIndex]) {
+      alert('Added to Cart');
+    } else {
       alert('Removed from Cart');
     }
   };

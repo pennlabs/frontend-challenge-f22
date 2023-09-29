@@ -3,6 +3,7 @@ import './App.css';
 import Nav from './components/Nav';
 import Courses from './components/Courses';
 import Cart from './components/Cart';
+import React, { useState } from 'react';
 
 function App() {
   
