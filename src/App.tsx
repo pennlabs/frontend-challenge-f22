@@ -5,6 +5,7 @@ import Courses from './components/Courses';
 import Cart from './components/Cart';
 
 function App() {
+  
   return (
     <>
       <Nav />
